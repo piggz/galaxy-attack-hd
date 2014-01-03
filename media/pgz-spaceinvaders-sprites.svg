@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.1 r9760"
+   sodipodi:docname="New document 1">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="5.1966131"
+     inkscape:cx="232.24561"
+     inkscape:cy="753.22051"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:snap-global="true"
+     inkscape:window-width="1440"
+     inkscape:window-height="855"
+     inkscape:window-x="-4"
+     inkscape:window-y="-3"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2985" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#00ff06;fill-opacity:1;stroke:none"
+       id="rect2991"
+       width="4.9999943"
+       height="5.2548571"
+       x="245"
+       y="257.36218"
+       ry="0"
+       inkscape:export-filename="/home/piggz/projects/pgz-spaceinvaders/qml/pgz-spaceinvaders/pics/ship.png"
+       inkscape:export-xdpi="94.540001"
+       inkscape:export-ydpi="94.540001" />
+    <rect
+       style="fill:#00ff06;stroke:none;stroke-width:0.30000000999999998;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;fill-opacity:1"
+       id="rect2993"
+       width="15.202209"
+       height="15.202209"
+       x="239.77156"
+       y="262.42459"
+       inkscape:export-filename="/home/piggz/projects/pgz-spaceinvaders/qml/pgz-spaceinvaders/pics/ship.png"
+       inkscape:export-xdpi="94.540001"
+       inkscape:export-ydpi="94.540001" />
+    <rect
+       style="fill:#00ff06;fill-opacity:1;stroke:none"
+       id="rect2995"
+       width="74.993317"
+       height="20.000015"
+       x="210"
+       y="277.36218"
+       inkscape:export-filename="/home/piggz/projects/pgz-spaceinvaders/qml/pgz-spaceinvaders/pics/ship.png"
+       inkscape:export-xdpi="94.540001"
+       inkscape:export-ydpi="94.540001" />
+    <rect
+       style="fill:#00ff06;fill-opacity:1;stroke:none"
+       id="rect2997"
+       width="5.1991215"
+       height="15.202209"
+       x="284.80087"
+       y="282.24521"
+       inkscape:export-filename="/home/piggz/projects/pgz-spaceinvaders/qml/pgz-spaceinvaders/pics/ship.png"
+       inkscape:export-xdpi="94.540001"
+       inkscape:export-ydpi="94.540001" />
+    <rect
+       style="fill:#00ff06;fill-opacity:1;stroke:none"
+       id="rect2999"
+       width="5.2512512"
+       height="14.924552"
+       x="204.74875"
+       y="282.43762"
+       inkscape:export-filename="/home/piggz/projects/pgz-spaceinvaders/qml/pgz-spaceinvaders/pics/ship.png"
+       inkscape:export-xdpi="94.540001"
+       inkscape:export-ydpi="94.540001" />
+  </g>
+</svg>

@@ -1,0 +1,29 @@
+Name: pgz-spaceinvaders-qt5
+Summary: Space Invaders Clone
+Version: 0.8
+Release: 1
+Group: Games/Action
+License: GPL v2
+URL: http://www.piggz.co.uk
+Sources:
+- '%{name}-%{version}.tar.bz2'
+Description: |
+  Space Invaders clone written using QML
+PkgConfigBR:
+- Qt5Quick
+- Qt5Qml
+- Qt5Core
+- qdeclarative5-boostable
+- Qt5Svg
+Requires:
+- Qt5Declarative
+- Qt5Multimedia
+- qt5-qtsvg
+Configure: none
+Builder: qtc5
+Files:
+-
+- /usr/bin
+- /usr/share/pgz-spaceinvaders-qt5
+- /usr/share/applications
+PkgBR: []

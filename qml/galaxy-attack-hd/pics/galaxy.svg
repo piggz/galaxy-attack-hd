@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   width="256"
+   height="128"
+   id="svg2">
+  <defs
+     id="defs4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-924.36218)"
+     id="layer1">
+    <g
+       transform="scale(0.72996696,1.369925)"
+       id="text2990"
+       style="font-size:125.75814056px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:none;stroke:none;font-family:Sans">
+      <path
+         d="m 52.762285,765.58264 -48.4168842,0 0,-88.0307 47.5365772,-0.12575 0,9.43186 -37.978959,0 0,69.29273 29.050131,0 0.125758,-42.12898 -14.965219,0 0,-9.43186 24.648596,0 0,60.9927"
+         id="path2995"
+         style="font-variant:normal;font-weight:bold;font-stretch:normal;fill:none;stroke:#7df9ff;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:UA Squared;-inkscape-font-specification:UA Squared Bold" />
+      <path
+         d="m 114.28749,765.45688 -9.55762,0 0,-51.43508 -29.05013,0 0,51.56084 -9.557618,0 0,-88.15645 48.165368,0 0,88.03069 m -9.55762,-78.59883 -29.175888,0 0,17.73189 29.175888,0.12576 0,-17.85765"
+         id="path2997"
+         style="font-variant:normal;font-weight:bold;font-stretch:normal;fill:none;stroke:#7df9ff;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:UA Squared;-inkscape-font-specification:UA Squared Bold" />
+      <path
+         d="m 158.83535,765.58264 -33.70319,-0.12576 0,-88.03069 9.55762,0 0,78.22156 24.14557,0.12576 0,9.80913"
+         id="path2999"
+         style="font-variant:normal;font-weight:bold;font-stretch:normal;fill:none;stroke:#7df9ff;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:UA Squared;-inkscape-font-specification:UA Squared Bold" />
+      <path
+         d="m 220.15029,765.45688 -9.55762,0 0,-51.43508 -29.05013,0 0,51.56084 -9.55762,0 0,-88.15645 48.16537,0 0,88.03069 m -9.55762,-78.59883 -29.17589,0 0,17.73189 29.17589,0.12576 0,-17.85765"
+         id="path3001"
+         style="font-variant:normal;font-weight:bold;font-stretch:normal;fill:none;stroke:#7df9ff;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:UA Squared;-inkscape-font-specification:UA Squared Bold" />
+      <path
+         d="m 285.69976,765.58264 -10.18641,-0.12576 -17.85765,-44.76989 -17.85766,44.76989 -10.18641,0.12576 22.76223,-58.10026 -11.94703,-30.05619 10.68944,0 6.53943,16.72583 6.53942,-16.72583 10.68944,0 -11.94702,30.05619 22.76222,58.10026"
+         id="path3003"
+         style="font-variant:normal;font-weight:bold;font-stretch:normal;fill:none;stroke:#7df9ff;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:UA Squared;-inkscape-font-specification:UA Squared Bold" />
+      <path
+         d="m 347.26228,677.42619 -18.86372,30.05619 -0.12575,57.9745 -10.43793,0.12576 0,-58.10026 -18.86372,-30.43347 12.19854,0 12.07278,19.61827 11.31823,-19.24099 12.70157,0"
+         id="path3005"
+         style="font-variant:normal;font-weight:bold;font-stretch:normal;fill:none;stroke:#7df9ff;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;font-family:UA Squared;-inkscape-font-specification:UA Squared Bold" />
+    </g>
+  </g>
+</svg>

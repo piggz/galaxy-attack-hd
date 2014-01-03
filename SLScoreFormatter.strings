@@ -1,0 +1,7 @@
+"DefaultFormat" = "%r";
+"LevelAndModeFormat" = "%L %l";
+"LevelOnlyFormat" = "%l %L";
+"ModeOnlyFormat" = "";
+"NoLevelFormat" = "%r%R";
+"ResultTimeConversion" = "%h:%0m:%0s";
+"ScoresAndLevelFormat" = "%r%R %S %L %l";
