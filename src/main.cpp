@@ -11,9 +11,9 @@
 #include "qtquick2applicationviewer.h"
 
 #ifdef Q_OS_ANDROID
-#define SC_HAS_INITDATA 0
 #include <androidaudio.h>
 #include "scoreloop/scoreloop.h"
+#include "androidiap.h"
 #endif
 
 #ifdef Q_OS_PLAYBOOK
@@ -35,17 +35,24 @@
 #define VER VER_(MYVERSION)
 
 #ifdef Q_OS_ANDROID
-
 #include <jni.h>
 
 static JavaVM* jvm;
 
+static JNINativeMethod methods[] = {
+    {"itemPurchased", "(Ljava/lang/String;I)V", (void *)itemPurchased}
+};
 
-jint JNI_OnLoad(JavaVM* vm, void* reserved)
-
+jint JNICALL JNI_OnLoad(JavaVM *vm, void *)
 {
-
+    JNIEnv *env;
     jvm = vm;
+    if (vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_4) != JNI_OK)
+        return JNI_FALSE;
+
+    jclass clazz = env->FindClass("uk/co/piggz/galaxy_attack_hd/GalaxyAttackHDActivity");
+    if (env->RegisterNatives(clazz, methods, sizeof(methods) / sizeof(methods[0])) < 0)
+        return JNI_FALSE;
 
     return JNI_VERSION_1_6;
 
@@ -82,7 +89,6 @@ int main(int argc, char *argv[])
     JNIEnv* env;
     jvm->AttachCurrentThread(&env, NULL);
 
-
     AndroidAudio *androidAudio = AndroidAudio::instance();
     viewer.rootContext()->setContextProperty("NativeAudio", androidAudio);
 
@@ -92,8 +98,11 @@ int main(int argc, char *argv[])
     Scoreloop *scoreloop = new Scoreloop();
     viewer.rootContext()->setContextProperty("ScoreLoop", scoreloop);
 
+    AndroidIAP *iap = new AndroidIAP();
+    viewer.rootContext()->setContextProperty("IAP", iap);
+
     viewer.engine()->setBaseUrl(QUrl::fromLocalFile("/"));
-    viewer.setSource(QUrl("assets:/qml/pgz-spaceinvaders/main-android.qml"));
+    viewer.setSource(QUrl("assets:/qml/galaxy-attack-hd/main-android.qml"));
 
     viewer.showFullScreen();
 

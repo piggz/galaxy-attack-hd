@@ -167,6 +167,11 @@ function cmdLevelComplete() {
         dropBombChance -= 10; //drop more bombs!
     }
 
+    if (level >= 3 && !optFullGameBought) {
+        cmdNotRunning()
+        buyDialog.onScreen = true;
+    }
+
     //New Life every 10 levels
     if (((level % 5) == 0) && (lives < 8)) {
         lives++;

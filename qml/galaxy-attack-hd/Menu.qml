@@ -116,7 +116,7 @@ Rectangle {
     Text {
         id: text2
         color: selectedItem == 5 ? "white" : foreground
-        text: "http://www.piggz.co.uk?page=spaceinvaders"
+        text: "http://piggz.co.uk/?q=content/galaxy-attack-hd"
         anchors.top: exitItem.bottom
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 20

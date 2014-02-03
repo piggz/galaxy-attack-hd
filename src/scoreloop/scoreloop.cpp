@@ -17,7 +17,7 @@ Scoreloop::Scoreloop(QObject *parent) :
     mScoreAvailable(false),
     m_userController(0),
     mUser(0)
-#if Q_OS_ANDROID
+#ifdef Q_OS_ANDROID
     ,activity(0)
 #endif
 {

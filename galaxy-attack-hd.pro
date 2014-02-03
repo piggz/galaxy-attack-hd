@@ -3,7 +3,7 @@ folder_01.source = qml/galaxy-attack-hd
 folder_01.target = qml
 DEPLOYMENTFOLDERS = folder_01
 
-VERSION = 0.9.8
+VERSION = 0.9.9
 DEFINES+="MYVERSION=$${VERSION}"
 
 # Additional import path used to resolve QML modules in Creator's code model
@@ -30,21 +30,24 @@ SOURCES += src/main.cpp \
     src/Bunker.cpp \
     src/Helper.cpp \
     src/BunkerFactory.cpp \
-    src/scoremodel.cpp
+    src/scoremodel.cpp \
+    src/androidiap.cpp
 
 HEADERS += \
     src/Bunker.h \
     src/Helper.h \
     src/BunkerFactory.h \
-    src/scoremodel.h
+    src/scoremodel.h \
+    src/androidiap.h
 
 android {
     #Include the android audio library
-    include(androidaudio/androidaudio.pri)
+    include(src/androidaudio/androidaudio.pri)
     INCLUDEPATH += Scoreloop/include
     LIBS += -L$$PWD/Scoreloop/libraries/armeabi-v7a/ -lscoreloopcore
 
-    QT += multimedia
+    QT += multimedia \
+          androidextras
 
     SOURCES += src/scoreloop/scoreloop.cpp
     HEADERS += src/scoreloop/scoreloop.h
@@ -80,12 +83,14 @@ OTHER_FILES += \
     bar-descriptor.xml \
     bar-descriptor-pb.xml \
     android/AndroidManifest.xml \
-    android/src/uk/co/piggz/pgz_spaceinvaders/MyApplication.java
+    android/src/uk/co/piggz/galaxy_attack_hd/GalaxyAttackHDActivity.java \
+    android/src/uk/co/piggz/galaxy_attack_hd/GalaxyAttackHDApplication.java \
+    qml/galaxy-attack-hd/PGZDialog.qml
 
-ANDROID_EXTRA_LIBS = /home/piggz/sdks/Qt5.2.0rc1/5.2.0-rc1/android_armv7/plugins/sensors/libqtsensors_android.so \
-/home/piggz/sdks/Qt5.2.0rc1/5.2.0-rc1/android_armv7/plugins/sensors/libqtsensors_generic.so \
-/home/piggz/sdks/Qt5.2.0rc1/5.2.0-rc1/android_armv7/lib/libQt5Sensors.so \
-/home/piggz/sdks/Qt5.2.0rc1/5.2.0-rc1/android_armv7/lib/libQt5Multimedia.so \
+ANDROID_EXTRA_LIBS = /home/piggz/sdks/Qt5.2.0/5.2.0/android_armv7/plugins/sensors/libqtsensors_android.so \
+/home/piggz/sdks/Qt5.2.0/5.2.0/android_armv7/plugins/sensors/libqtsensors_generic.so \
+/home/piggz/sdks/Qt5.2.0/5.2.0/android_armv7/lib/libQt5Sensors.so \
+/home/piggz/sdks/Qt5.2.0/5.2.0/android_armv7/lib/libQt5Multimedia.so \
 /home/piggz/projects/pgz-spaceinvaders-qt5/Scoreloop/libraries/armeabi-v7a/libscoreloopcore.so
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

@@ -84,8 +84,11 @@ bool ScoreModel::addScore(int score, const QString &levelId, const QString &leve
 
 bool ScoreModel::loadScores()
 {
+#ifdef Q_OS_BLACKBERRY
     QFile file("data/galaxy-attack-hd-scores.db");
-    //QFile file("pgz-spaceinvaders-scores.db");
+#else
+    QFile file("galaxy-attack-hd-scores.db");
+#endif
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return false;
 
@@ -117,8 +120,11 @@ bool ScoreModel::loadScores()
 
 bool ScoreModel::saveScores()
 {
+#ifdef Q_OS_BLACKBERRY
     QFile file("data/galaxy-attack-hd-scores.db");
-    //QFile file("pgz-spaceinvaders-scores.db");
+#else
+    QFile file("galaxy-attack-hd-scores.db");
+#endif
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         qDebug() << "File open error:" << file.error() << QFileInfo(file).absolutePath();
         return false;

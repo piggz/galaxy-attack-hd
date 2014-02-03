@@ -21,7 +21,7 @@ AndroidAudio* AndroidAudio::instance()
 }
 
 AndroidAudio::AndroidAudio() :
-    QObject(0), mEngineObject(NULL), mEngineEngine(NULL), mOutputMixObject(NULL), mSounds(), mSoundCount(0), mPlayerObject1(NULL)
+    QObject(0), mSounds(), mSoundCount(0), mEngineObject(NULL), mEngineEngine(NULL), mOutputMixObject(NULL),  mPlayerObject1(NULL)
 {
     createEngine();
     startSoundPlayer();
@@ -228,6 +228,9 @@ void AndroidAudio::playSound(const QString& name, bool loop)
 
 void AndroidAudio::bufferPlayerCallback(SLBufferQueueItf bq, void *context)
 {
+    Q_UNUSED(bq)
+    Q_UNUSED(context)
+
     qDebug() << "AndroidAudio::bufferPlayerCallback";
     if (m_loopLastSound) {
         playSound(m_lastSound, m_loopLastSound);

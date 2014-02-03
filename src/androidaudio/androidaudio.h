@@ -37,6 +37,9 @@ private:
     void destroyEngine();
     void startSoundPlayer();
 
+    QMap<QString, AndroidSoundEffect*> mSounds;
+    int32_t mSoundCount;
+
     // engine interfaces
     SLObjectItf mEngineObject;
     SLEngineItf mEngineEngine;
@@ -54,8 +57,6 @@ private:
     SLPlayItf mPlayerPlay2;
     SLBufferQueueItf mPlayerQueue2;
 
-    QMap<QString, AndroidSoundEffect*> mSounds;
-    int32_t mSoundCount;
     bool m_loopLastSound;
     QString m_lastSound;
 

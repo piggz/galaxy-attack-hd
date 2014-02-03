@@ -1,4 +1,3 @@
-//import QtMobility.sensors 1.2
 import QtSensors 5.0
 import QtQuick 2.0
 import SpaceInvaders 1.0
@@ -25,10 +24,17 @@ Rectangle {
     property bool optLeftHandedOSC: false
     property bool optAlternateAxis: false
     property bool optReverseAxis: false
+    property bool optFullGameBought: false
 
     property int axisModifier: optReverseAxis ? -1 : 1
 
     ColorAnimation on color {id:flashanim; from: "#999999"; to: "black"; duration: 200 }
+
+    Image {
+        id: background
+        source: "pics/background.png"
+        anchors.fill: parent
+    }
 
     MouseArea {
         id: themousearea
@@ -57,7 +63,7 @@ Rectangle {
         color: "#ffffff"
         x: 2
         y: 2
-        font.pixelSize: closeButton.height - 10;
+        font.pixelSize: menuButton.height - 10;
     }
 
     Text {
@@ -66,13 +72,13 @@ Rectangle {
         color: "#ffffff"
         y: 2
         anchors.horizontalCenter: board.horizontalCenter
-        font.pixelSize: closeButton.height - 10;
+        font.pixelSize: menuButton.height - 10;
     }
 
 
     Text {
         id: starttext
-        text: "Tap screen to start"
+        text: gameState === "NOTRUNNING" ? "Tap the green button to start!" : "Tap the screen or fire to continue"
         color: "#ffffff"
         anchors.horizontalCenter: board.horizontalCenter
         anchors.top: topline.bottom
@@ -145,6 +151,7 @@ Rectangle {
         }
     }
 
+    /*
     CloseButton {
         id: closeButton
 
@@ -152,19 +159,18 @@ Rectangle {
             console.log("exit pressed");
             exitPressed();
         }
-    }
+    }*/
 
     Image {
-        id: menubutton
+        id: menuButton
 
-        source: "pics/menu.png"
-        width: Helper.mmToPixels(7);
-        height: Helper.mmToPixels(7);
-        anchors.right: closeButton.left
-        anchors.rightMargin: closeButton.width
+        source: "pics/menu.svg"
+        width: Helper.mmToPixels(5);
+        height: Helper.mmToPixels(5);
+        anchors.right: parent.right
         anchors.top: parent.top
         anchors.topMargin: 0
-        fillMode: Image.PreserveAspectFit
+        fillMode: Image.Stretch
         smooth: false
 
         MouseArea {
@@ -181,9 +187,14 @@ Rectangle {
 
     Menu {
         id:menupanel
-        anchors.right: menubutton.left
+        anchors.right: menuButton.left
         onScreen: false
         z:15
+
+        onExitClicked: {
+            menupanel.onScreen = false;
+            exitDialog.onScreen = true;
+        }
     }
 
     Rectangle {
@@ -192,7 +203,7 @@ Rectangle {
         height:  1
         x: 0
         y: parent.height - ship.height
-        color: "#00ff00"
+        color: "#7DF9FF"
 
     }
 
@@ -201,8 +212,8 @@ Rectangle {
         width: parent.width
         height:  1
         x: 0
-        anchors.top: closeButton.bottom
-        color: "#00ff00"
+        anchors.top: menuButton.bottom
+        color: "#7DF9FF"
     }
 
     Accelerometer  {
@@ -371,41 +382,99 @@ Rectangle {
         anchors.horizontalCenterOffset: 100
     }
 
+    Hd {
+        id: hdlogo
+        anchors.verticalCenter: board.verticalCenter
+        anchors.verticalCenterOffset: -50
+        anchors.right: invaderslogo.right
+    }
+
     SequentialAnimation {
         id: startAnimation
         running: false
         PropertyAnimation { target: spacelogo; property: "state"; from: "HIDDEN"; to: "VISIBLE" }
         PauseAnimation { duration: 1000 }
         PropertyAnimation { target: invaderslogo;property: "state";  from: "HIDDEN"; to: "VISIBLE" }
-
+        PauseAnimation { duration: 1000 }
+        PropertyAnimation { target: hdlogo ;property: "state";  from: "HIDDEN"; to: "VISIBLE" }
     }
 
-    ExitDialog {
+
+    PGZDialog {
         id:exitDialog
         z: 50
         anchors.centerIn: parent
+        message: "Are you sure you want to exit?"
         onClickedNo: {
-            exitDialog.onScreen = false;
+            exitDialog.onScreen = false
         }
 
         onClickedYes: {
-            exitDialog.onScreen = false;
+            exitDialog.onScreen = false
             exitGame();
         }
     }
 
-    Image {
-        id: infoImage
-        source: "pics/info.png"
-        width: Helper.mmToPixels(10);
-        height: Helper.mmToPixels(10);
+    PGZDialog {
+        id:buyDialog
+        z: 50
+        anchors.centerIn: parent
+        message: "You can unlock the full game with unlimited levels\nfor the equivalent of less than $1\nPress [Yes] to buy using Google Play\nor [No] to continue with the free version"
+        onClickedNo: {
+            buyDialog.onScreen = false
+        }
+
+        onClickedYes: {
+            buyDialog.onScreen = false
+            console.log("buying full game...");
+            IAP.purchaseItem("full_game");
+        }
+    }
+
+    ImageButton {
+        id: startImage
+        image: "pics/start.png"
+        width: Helper.mmToPixels(9);
+        height: Helper.mmToPixels(9);
         anchors.left: parent.left
+        anchors.leftMargin: 30
+        anchors.verticalCenter: parent.verticalCenter
+        //highlighed: selectedItem === 1;
+
+        onClicked: Logic.cmdNewGame()
+    }
+
+    ImageButton {
+        id: infoImage
+        image: "pics/info.png"
+        width: Helper.mmToPixels(9);
+        height: Helper.mmToPixels(9);
+        anchors.right: parent.right
+        anchors.rightMargin: 30
         anchors.verticalCenter: parent.verticalCenter
         smooth: false
         
         MouseArea {
             anchors.fill: parent
             onClicked: infoMessage.onScreen = true;
+        }
+    }
+
+    ImageButton {
+        id: iapButton
+        image: "pics/buy_full_game.png"
+        width: Helper.mmToPixels(9);
+        height: Helper.mmToPixels(9);
+        anchors.right: infoImage.left;
+        anchors.rightMargin: 30
+        anchors.verticalCenter: parent.verticalCenter
+        smooth: false
+        visible: gameState !== "RUNNING" && !optFullGameBought
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                buyDialog.onScreen = true;
+            }
         }
     }
 
@@ -428,14 +497,18 @@ Rectangle {
         loadSettings();
         Logic.cmdNotRunning();
 
-        if (PlatformID === 4 || PlatformID === 6 || PlatformID === 7) { //ANDROID/PLAYBOOK/BB10
-            //Load sound effects
-            NativeAudio.registerSound("assets:/qml/pgz-spaceinvaders/sounds/shoot.wav.pcm", "shoot");
-            NativeAudio.registerSound("assets:/qml/pgz-spaceinvaders/sounds/explosion.wav.pcm", "explosion");
-            NativeAudio.registerSound("assets:/qml/pgz-spaceinvaders/sounds/invaderkilled.wav.pcm", "killed");
-            NativeAudio.registerSound("assets:/qml/pgz-spaceinvaders/sounds/ufo_lowpitch.wav.pcm", "mystery");
+        //Load sound effects
+        NativeAudio.registerSound("assets:/qml/galaxy-attack-hd/sounds/shoot.wav.pcm", "shoot");
+        NativeAudio.registerSound("assets:/qml/galaxy-attack-hd/sounds/explosion.wav.pcm", "explosion");
+        NativeAudio.registerSound("assets:/qml/galaxy-attack-hd/sounds/invaderkilled.wav.pcm", "killed");
+        NativeAudio.registerSound("assets:/qml/galaxy-attack-hd/sounds/ufo_lowpitch.wav.pcm", "mystery");
 
+        if (IAP.checkItemPurchased("full_game") === 0) {
+            optFullGameBought = true;
+        } else {
+            optFullGameBought = false;
         }
+
         console.log("startup done");
     }
 
@@ -492,6 +565,22 @@ Rectangle {
                 }
             }
         }
+
+    }
+
+    Connections {
+        target: IAP
+        onItemPurchased: {
+            console.log("Item Name:", itemName, " Purchase State: ", purchaseState);
+
+            if (itemName === "full_game" && purchaseState === 0) {
+                powerMessage.displayMessage("Thank you, game unlocked!");
+                optFullGameBought = true;
+            } else {
+                powerMessage.displayMessage("Buying game failed");
+                optFullGameBought = false;
+            }
+        }
     }
 
     function nowString()
@@ -511,7 +600,7 @@ Rectangle {
         optUseOSC = Helper.getBoolSetting("bUseOSC", false);
         optLeftHandedOSC = Helper.getBoolSetting("bLeftHandOSC", false);
         optAlternateAxis = Helper.getBoolSetting("bAlternateAxis", false);
-        optReverseAxis = Helper.getBoolSetting("bReverseAxis", true); //true for kindle, false otherwise
+        optReverseAxis = Helper.getBoolSetting("bReverseAxis", false); //true for kindle, false otherwise
         optFlashOnFire = Helper.getBoolSetting("bFlashOnFire", true);
         optSFX = Helper.getBoolSetting("bSFX", true);
     }

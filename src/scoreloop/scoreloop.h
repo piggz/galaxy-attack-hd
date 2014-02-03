@@ -63,16 +63,16 @@ private:
     QStringList allScores;
 
     SC_Client_h mClient;
+    static SC_ScoresController_h mScoresController;
+    SC_UserController_h m_userController;
+    SC_User_h mUser;
+
 #if SC_HAS_INITDATA
     SC_InitData_t mInitData;
 #else
     SC_ClientConfig_h mClientConfig;
     jobject activity;
 #endif
-    static SC_ScoresController_h mScoresController;
-    SC_UserController_h m_userController;
-    SC_User_h mUser;
-
 
 protected:
     static QVariantList leaderboardData;

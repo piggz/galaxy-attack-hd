@@ -8,9 +8,10 @@ Item {
     property bool onScreen
     property color foreground: "#7DF9FF"
     property int selectedItem: 0
+    property string message: ""
 
     width: text1.width + 50
-    height: 250
+    height: text1.height + 250
 
 
     scale:  onScreen ? 1 : 0
@@ -40,7 +41,7 @@ Item {
             x: 18
             y: 25
             color: foreground
-            text: "Are you sure you want to exit?"
+            text: message
             font.pixelSize: Sizer.largeFontSize()
         }
 
