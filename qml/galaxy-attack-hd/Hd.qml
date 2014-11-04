@@ -19,7 +19,7 @@ Item {
     Image {
         id: imgHd
 
-        source: "pics/hd.svg"
+        source: "pics/hd.png"
         width: parent.width / 3
         height: parent.height / 3
         smooth:  true

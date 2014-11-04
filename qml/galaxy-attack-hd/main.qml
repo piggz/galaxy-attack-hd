@@ -14,6 +14,8 @@ Rectangle {
     color: "#000000"
     width: 854
     height:  480
+    rotation: 90
+    transformOrigin: Item.TopLeft
 
     property string gameState
     property string lastGameState;
@@ -26,7 +28,6 @@ Rectangle {
     property bool optLeftHandedOSC: false
     property bool optAlternateAxis: false
     property bool optReverseAxis: false
-
 
     ColorAnimation on color {id:flashanim; from: "#999999"; to: "black"; duration: 200 }
 
@@ -87,7 +88,7 @@ Rectangle {
         x: (board.width - ship.width) / 2;
         y: board.height - (ship.height * 2) - 3;
     }
-
+    /*
     SoundEffect {
         id: shootSound
         source: "sounds/shoot.wav"
@@ -108,7 +109,7 @@ Rectangle {
         source: "sounds/ufo_lowpitch.wav"
         loops: SoundEffect.Infinite
     }
-
+*/
     Timer {
         id: starttimer
         repeat:  false
@@ -339,10 +340,11 @@ Rectangle {
         PropertyAnimation { target: hdlogo ;property: "state";  from: "HIDDEN"; to: "VISIBLE" }
     }
 
-    ExitDialog {
+    PGZDialog {
         id:exitDialog
         z: 50
         anchors.centerIn: parent
+        message: "Are you sure you want to exit?"
         onClickedNo: {
             exitDialog.onScreen = false
         }
@@ -351,6 +353,18 @@ Rectangle {
             exitDialog.onScreen = false
             exitGame();
         }
+    }
+
+    ImageButton {
+        id: startImage
+        image: "pics/start.png"
+        width: Helper.mmToPixels(9);
+        height: Helper.mmToPixels(9);
+        anchors.left: parent.left
+        anchors.leftMargin: 30
+        anchors.verticalCenter: parent.verticalCenter
+
+        onClicked: Logic.cmdNewGame()
     }
 
     Image {
@@ -506,4 +520,3 @@ Rectangle {
 
 
 }
-

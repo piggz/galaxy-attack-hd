@@ -3,7 +3,7 @@ folder_01.source = qml/galaxy-attack-hd
 folder_01.target = qml
 DEPLOYMENTFOLDERS = folder_01
 
-VERSION = 0.9.9
+VERSION = 0.9.9.5
 DEFINES+="MYVERSION=$${VERSION}"
 
 # Additional import path used to resolve QML modules in Creator's code model
@@ -31,26 +31,44 @@ SOURCES += src/main.cpp \
     src/Helper.cpp \
     src/BunkerFactory.cpp \
     src/scoremodel.cpp \
-    src/androidiap.cpp
+    src/gamecircleleaderboard.cpp
+
 
 HEADERS += \
     src/Bunker.h \
     src/Helper.h \
     src/BunkerFactory.h \
     src/scoremodel.h \
-    src/androidiap.h
+    src/pgz_platform.h \
+    android/jni/includes/AchievementsClientInterface.h \
+    android/jni/includes/AGSClientCommonInterface.h \
+    android/jni/includes/GameCircleClientInterface.h \
+    android/jni/includes/LeaderboardsClientInterface.h \
+    android/jni/includes/PlayerClientInterface.h \
+    android/jni/includes/WhispersyncClientInterface.h \
+    src/gamecircleleaderboard.h
+
+!android {
+!qnx
+ {
+     message(SailfishOS build)
+
+     DEFINES += MER_EDITION_SAILFISH
+     MER_EDITION = sailfish
+}
+}
 
 android {
     #Include the android audio library
     include(src/androidaudio/androidaudio.pri)
-    INCLUDEPATH += Scoreloop/include
-    LIBS += -L$$PWD/Scoreloop/libraries/armeabi-v7a/ -lscoreloopcore
+    INCLUDEPATH += android/jni/includes/
+    LIBS += -L$$PWD/android/jni/libs/ -lAmazonGamesJni
 
     QT += multimedia \
           androidextras
 
-    SOURCES += src/scoreloop/scoreloop.cpp
-    HEADERS += src/scoreloop/scoreloop.h
+    SOURCES += src/androidiap.cpp
+    HEADERS += src/androidiap.h
 }
 
 #Add native sound support for playbook
@@ -85,13 +103,30 @@ OTHER_FILES += \
     android/AndroidManifest.xml \
     android/src/uk/co/piggz/galaxy_attack_hd/GalaxyAttackHDActivity.java \
     android/src/uk/co/piggz/galaxy_attack_hd/GalaxyAttackHDApplication.java \
-    qml/galaxy-attack-hd/PGZDialog.qml
+    qml/galaxy-attack-hd/PGZDialog.qml \
+    android/src/com/android/vending/billing/IInAppBillingService.aidl \
+    android/src/com/nokia/payment/iap/aidl/INokiaIAPService.aidl \
+    android/src/uk/co/piggz/galaxy_attack_hd/GalaxyAttackUtils.java \
+    android/src/uk/co/piggz/galaxy_attack_hd/PaymentService.java \
+    galaxy-attack-hd.desktop \
+    galaxy-attack-512.png \
+    galaxy-attack-480.png \
+    galaxy-attack-128.png \
+    galaxy-attack-124.png \
+    galaxy-attack-86.png  \
+    rpm/galaxy-attack-hd.yaml \
+    rpm/galaxy-attack-hd.spec \
+    android/libs/libAmazonGamesJni.so \
+    android/assets/api_key.txt \
+    android/ant.properties
 
-ANDROID_EXTRA_LIBS = /home/piggz/sdks/Qt5.2.0/5.2.0/android_armv7/plugins/sensors/libqtsensors_android.so \
-/home/piggz/sdks/Qt5.2.0/5.2.0/android_armv7/plugins/sensors/libqtsensors_generic.so \
-/home/piggz/sdks/Qt5.2.0/5.2.0/android_armv7/lib/libQt5Sensors.so \
-/home/piggz/sdks/Qt5.2.0/5.2.0/android_armv7/lib/libQt5Multimedia.so \
-/home/piggz/projects/pgz-spaceinvaders-qt5/Scoreloop/libraries/armeabi-v7a/libscoreloopcore.so
+
+#ANDROID_EXTRA_LIBS = /home/piggz/sdks/Qt5.2.1/5.2.1/android_armv7/plugins/sensors/libqtsensors_android.so \
+#/home/piggz/sdks/Qt5.2.1/5.2.1/android_armv7/plugins/sensors/libqtsensors_generic.so \
+#/home/piggz/sdks/Qt5.2.1/5.2.1/android_armv7/lib/libQt5Sensors.so \
+#/home/piggz/sdks/Qt5.2.1/5.2.1/android_armv7/lib/libQt5Multimedia.so
+
+ANDROID_EXTRA_LIBS = /home/piggz/projects/galaxy-attack-hd/android/jni/libs/libAmazonGamesJni.so
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

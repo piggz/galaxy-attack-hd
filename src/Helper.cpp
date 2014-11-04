@@ -4,7 +4,7 @@
 #include <QtWidgets/QGraphicsItem>
 #include <QMetaEnum>
 
-#if defined(Q_OS_ANDROID)
+#if defined(Q_OS_ANDROID) || defined(MER_EDITION_SAILFISH)
 #include <QScreen>
 #endif
 class StaticQtMetaObject : public QObject
@@ -55,7 +55,9 @@ int Helper::mmToPixels(int mm)
 #if defined(MEEGO_EDITION_HARMATTAN) || defined(Q_OS_SYMBIAN)
     qDebug() << "Screen 0 DPI is " << m_info.getDPIWidth(0);
     return (mm*m_info.getDPIWidth(0)) / 25.4;
-#elif defined(Q_OS_ANDROID)
+#elif defined(Q_OS_ANDROID) || defined(MER_EDITION_SAILFISH)
+    //qDebug() << "Converting " << mm << " to " << (mm*QGuiApplication::primaryScreen()->physicalDotsPerInch()) / 25.4;
+    //qDebug() << "PhysicalDPI is" << QGuiApplication::primaryScreen()->physicalDotsPerInch() << "Physical Size" << QGuiApplication::primaryScreen()->physicalSize() << "LogicalDDPI" << QGuiApplication::primaryScreen()->logicalDotsPerInch();
     return (mm*QGuiApplication::primaryScreen()->physicalDotsPerInch()) / 25.4;
 #else
     return (mm*mPPI) / 25.4;

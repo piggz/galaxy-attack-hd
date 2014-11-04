@@ -2,35 +2,18 @@
 
 function alien1width()
 {
-    return board.width * 0.04;
-}
-
-function alien1height()
-{
-    return alien1width() * (9/7);
+    return board.width * 0.05;
 }
 
 function alien2width()
 {
-    return board.width * 0.04;
-
-}
-
-function alien2height()
-{
-    return alien2width() * (9/7);
+    return board.width * 0.05;
 
 }
 
 function alien3width()
 {
-    return board.width * 0.04;
-}
-
-function alien3height()
-{
-    return alien3width() * (9/7);
-
+    return board.width * 0.05;
 }
 
 function mysteryWidth()
@@ -54,12 +37,12 @@ function mysteryHeight()
 
 function alienXGap()
 {
-    return board.width * 0.01;
+    return board.width * 0.005;
 }
 
 function alienYGap()
 {
-    return board.height * 0.01;
+    return board.height * 0.005;
 }
 
 function bunkerWidth()
@@ -95,12 +78,13 @@ function laserSpeed()
 
 function largeFontSize()
 {
-    //return board.width * 0.04;
-    return Helper.mmToPixels(4);
+    return board.width * 0.04;
+    //return Helper.mmToPixels(6);
 }
 
 function smallFontSize()
 {
-    //return board.width * 0.02;
-    return Helper.mmToPixels(3);
+    return board.width * 0.02;
+    //return Helper.mmToPixels(4);
+
 }

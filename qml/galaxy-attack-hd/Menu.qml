@@ -47,7 +47,7 @@ Rectangle {
 
     MenuItem {
         id: settingsItem
-        height: Helper.mmToPixels(6);
+        height: Helper.mmToPixels(8);
         menuImage: "pics/options.png"
         menuText: "Settings"
         menuColor: selectedItem == 1 ? "white" : foreground
@@ -64,7 +64,7 @@ Rectangle {
 
     MenuItem {
         id: hiScoreItem
-        height: Helper.mmToPixels(6);
+        height: Helper.mmToPixels(8);
         menuImage: "pics/hiscore.png"
         menuText: "Hi Scores"
         menuColor: selectedItem == 2 ? "white" : foreground
@@ -81,24 +81,26 @@ Rectangle {
 
     MenuItem {
         id: globalScoreItem
-        height: Helper.mmToPixels(6);
+        height: Helper.mmToPixels(8)
+        visible: PlatformID !== 8
         menuImage: "pics/globalscore.png"
         menuText: "Global Scores"
         menuColor: selectedItem == 3 ? "white" : foreground
-        anchors.top: hiScoreItem.bottom
+        anchors.top: visible ? hiScoreItem.bottom : settingsItem.bottom
         anchors.left: parent.left
         anchors.topMargin: 10
         anchors.leftMargin: 30
 
         onMenuItemClicked: {
             menupanel.onScreen = false;
-            scoreloopBoard.onScreen = !scoreloopBoard.onScreen;
+            GameCircle.showLeaderBoard();
+            //scoreloopBoard.onScreen = !scoreloopBoard.onScreen;
         }
     }
 
     MenuItem {
         id: exitItem
-        height: Helper.mmToPixels(6);
+        height: Helper.mmToPixels(8);
         menuImage: "pics/x.svg"
         menuText: "Exit"
         menuColor: selectedItem == 4 ? "white" : foreground

@@ -24,6 +24,9 @@
 #elif defined(Q_OS_BLACKBERRY)
     const int platformId = 7;
     const char *platformString = "BB10";
+#elif defined(MER_EDITION_SAILFISH)
+    const int platformId = 8;
+    const char *platformString = "SAILFISH";
 #else
     // desktop probably
     const int platformId = 5;

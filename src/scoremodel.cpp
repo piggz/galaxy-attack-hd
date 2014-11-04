@@ -5,7 +5,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QFileInfo>
-
+#include <QStandardPaths>
 
 ScoreModel::ScoreModel(QObject *parent) :
     QAbstractListModel(parent)
@@ -87,7 +87,7 @@ bool ScoreModel::loadScores()
 #ifdef Q_OS_BLACKBERRY
     QFile file("data/galaxy-attack-hd-scores.db");
 #else
-    QFile file("galaxy-attack-hd-scores.db");
+    QFile file(QStandardPaths::DataLocation + "galaxy-attack-hd-scores.db");
 #endif
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
         return false;
@@ -123,7 +123,7 @@ bool ScoreModel::saveScores()
 #ifdef Q_OS_BLACKBERRY
     QFile file("data/galaxy-attack-hd-scores.db");
 #else
-    QFile file("galaxy-attack-hd-scores.db");
+    QFile file(QStandardPaths::DataLocation + "galaxy-attack-hd-scores.db");
 #endif
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         qDebug() << "File open error:" << file.error() << QFileInfo(file).absolutePath();

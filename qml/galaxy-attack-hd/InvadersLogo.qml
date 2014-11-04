@@ -2,15 +2,15 @@ import QtQuick 2.0
 
 Item {
     id: spacelogo
-    width: 400
+    width: invaderimage.width
     height: 128
     state: "HIDDEN"
+    property int offScreenLocation: 0
+    property int onScreenLocation: 0
 
     Image {
-        id: spaceimage
-
-        source: "pics/attack.svg"
-        width: parent.width
+        id: invaderimage
+        source: "pics/attack.png"
         height: parent.height
         smooth:  true
     }
@@ -18,19 +18,16 @@ Item {
     states: [
         State {
             name: "HIDDEN"
-            PropertyChanges { target: spacelogo; width: 0}
-            PropertyChanges { target: spacelogo; height: 0}
+            PropertyChanges { target: spacelogo; x: offScreenLocation}
         },
         State {
             name: "VISIBLE"
-            PropertyChanges { target: spacelogo; width: 400}
-            PropertyChanges { target: spacelogo; height: 128}
+            PropertyChanges { target: spacelogo; x: onScreenLocation}
         }
     ]
 
     transitions: Transition {
-        NumberAnimation { properties: "width"; easing.type: Easing.OutBounce; duration: 1000 }
-        NumberAnimation { properties: "height"; easing.type: Easing.OutBounce; duration: 1000 }
+        NumberAnimation { properties: "x"; easing.type: Easing.OutBounce; duration: 1000 }
     }
 }
 

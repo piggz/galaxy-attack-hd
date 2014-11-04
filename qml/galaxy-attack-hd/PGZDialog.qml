@@ -42,7 +42,7 @@ Item {
             y: 25
             color: foreground
             text: message
-            font.pixelSize: Sizer.largeFontSize()
+            font.pixelSize: Sizer.smallFontSize()
         }
 
         Rectangle {

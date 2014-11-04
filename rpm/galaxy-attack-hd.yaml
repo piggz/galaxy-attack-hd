@@ -1,6 +1,6 @@
-Name: pgz-spaceinvaders-qt5
+Name: galaxy-attack-hd
 Summary: Space Invaders Clone
-Version: 0.8
+Version: 0.9.9.5
 Release: 1
 Group: Games/Action
 License: GPL v2
@@ -16,14 +16,16 @@ PkgConfigBR:
 - qdeclarative5-boostable
 - Qt5Svg
 Requires:
-- Qt5Declarative
-- Qt5Multimedia
-- qt5-qtsvg
+- qt5-qtdeclarative-qtquick
+- qt5-qtdeclarative-import-sensors
+- qt5-qtgui
 Configure: none
 Builder: qtc5
 Files:
--
-- /usr/bin
-- /usr/share/pgz-spaceinvaders-qt5
+- '/opt/%{name}'
+- '/opt/%{name}/qml'
+- '%{_datadir}/applications/%{name}.desktop'
+- '%{_datadir}/icons/hicolor/86x86/apps/galaxy-attack-86.png'
 - /usr/share/applications
+
 PkgBR: []

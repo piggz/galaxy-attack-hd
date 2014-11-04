@@ -364,29 +364,28 @@ Rectangle {
         id: explosion
         x: 0
         y: 0
+        width: Sizer.alien1width() * 2;
+        height: width
     }
 
     SpaceLogo {
         id: spacelogo
-        anchors.verticalCenter: board.verticalCenter
-        anchors.verticalCenterOffset: -75
-        anchors.horizontalCenter: board.horizontalCenter
-        anchors.horizontalCenterOffset: -100
+        y: board.height / 2 - 30 - height
+        offScreenLocation: -width - 10
+        onScreenLocation: board.width / 2 - width + 50
     }
 
     InvadersLogo {
         id: invaderslogo
-        anchors.verticalCenter: board.verticalCenter
-        anchors.verticalCenterOffset: 75
-        anchors.horizontalCenter: board.horizontalCenter
-        anchors.horizontalCenterOffset: 100
+        y: board.height / 2 + 30
+        offScreenLocation: board.width + 10
+        onScreenLocation: board.width / 2 - 50
     }
 
     Hd {
         id: hdlogo
-        anchors.verticalCenter: board.verticalCenter
-        anchors.verticalCenterOffset: -50
-        anchors.right: invaderslogo.right
+        anchors.verticalCenter: spacelogo.verticalCenter
+        anchors.horizontalCenter: invaderslogo.horizontalCenter
     }
 
     SequentialAnimation {
@@ -439,7 +438,6 @@ Rectangle {
         anchors.left: parent.left
         anchors.leftMargin: 30
         anchors.verticalCenter: parent.verticalCenter
-        //highlighed: selectedItem === 1;
 
         onClicked: Logic.cmdNewGame()
     }
@@ -454,10 +452,8 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         smooth: false
         
-        MouseArea {
-            anchors.fill: parent
-            onClicked: infoMessage.onScreen = true;
-        }
+        onClicked: infoMessage.onScreen = true;
+
     }
 
     ImageButton {
@@ -470,11 +466,27 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         smooth: false
         visible: gameState !== "RUNNING" && !optFullGameBought
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                buyDialog.onScreen = true;
-            }
+
+        onClicked: {
+            buyDialog.onScreen = true;
+        }
+
+    }
+
+    //Play button
+    ImageButton {
+        id: buttonPlay
+        width: Helper.mmToPixels(9);
+        height: Helper.mmToPixels(9);
+        anchors.right: iapButton.left;
+        anchors.rightMargin: 30
+        anchors.verticalCenter: parent.verticalCenter
+        visible: gameState === "NOTRUNNING"
+
+        image: "pics/play_store.png"
+
+        onClicked: {
+            Qt.openUrlExternally("market://search?q=pub:Adam Pigg");
         }
     }
 
@@ -559,11 +571,15 @@ Rectangle {
     Connections {
         target: Viewer
         onWindowStateChanged: {
+            console.log("Window state changed", windowState);
             if (windowState && 1) {
                 if (gameState != "NOTRUNNING") {
                     Logic.cmdPause();
                 }
             }
+        }
+        onVisibleChanged: {
+            console.log("visible", visible);
         }
 
     }

@@ -336,17 +336,16 @@ function createAliens() {
 
     //Row 2
     component = Qt.createComponent("alien2.qml");
-    y += Sizer.alien1height() + Sizer.alienYGap();
+    y += aliens[9].height + Sizer.alienYGap();
     for (i=0; i<10; i++) {
         aliens[i+10] = component.createObject(board);
         aliens[i+10].x = ((aliens[i+10].width + Sizer.alienXGap()) * i) + Sizer.alienXGap();
         aliens[i+10].y = y;
         aliens[i+10].objectName = "alien_" + i+10;
-
     }
 
     //Row 3
-    y += Sizer.alien2height() + Sizer.alienYGap();
+    y += aliens[19].height + Sizer.alienYGap();
     for (i=0; i<10; i++) {
         aliens[i+20] = component.createObject(board);
         aliens[i+20].x = ((aliens[i+20].width + Sizer.alienXGap()) * i) + Sizer.alienXGap();
@@ -356,7 +355,7 @@ function createAliens() {
 
     //Row 4
     component = Qt.createComponent("alien3.qml");
-    y += Sizer.alien2height() + Sizer.alienYGap();
+    y += aliens[29].height + Sizer.alienYGap();
     for (i=0; i<10; i++) {
         aliens[i+30] = component.createObject(board);
         aliens[i+30].x = ((aliens[i+30].width + Sizer.alienXGap()) * i) + Sizer.alienXGap();
@@ -366,7 +365,7 @@ function createAliens() {
     }
 
     //Row 5
-    y += Sizer.alien3height() + Sizer.alienYGap();
+    y += aliens[39].height + Sizer.alienYGap();
     for (i=0; i<10; i++) {
         aliens[i+40] = component.createObject(board);
         aliens[i+40].x = ((aliens[i+40].width + Sizer.alienXGap()) * i) + Sizer.alienXGap();
@@ -713,7 +712,7 @@ function moveAliens() {
                     //Drop
                     for (j = 0; j<50; j++) {
                         if (aliens[j]) {
-                            aliens[j].y += Sizer.alien1height() / 3;
+                            aliens[j].y += Sizer.alienYGap() * 3
                         }
                     }
                     break;
@@ -722,14 +721,14 @@ function moveAliens() {
         }
     } else {
         for (i=0; i<50; i++) {
-            if (aliens[i] != null) {
+            if (aliens[i] !== null) {
                 if (aliens[i].x < 10) {
                     aliendirection = 1;
 
                     //Drop
                     for (j=0; j<50; j++) {
                         if (aliens[j]) {
-                            aliens[j].y +=  Sizer.alien1height() / 3;
+                            aliens[j].y +=  Sizer.alienYGap() * 3
                         }
                     }
                     break;
@@ -864,7 +863,7 @@ function shouldDeployMysteryShip()
     var enoughSpace = true;
 
     for (var i = 0; i < 10; ++i) {
-        if (aliens[i] !== null) {
+        if (aliens[i] !== null && aliens[i] !== undefined) {
             if (aliens[i].y < (Sizer.mysteryHeight() + topline.y + 5)) {
                 enoughSpace = false;
             }
@@ -884,6 +883,7 @@ function shouldDeployMysteryShip()
 //Multi platform function for playing sounds
 function playSound(name)
 {
+
     if (optSFX && PlatformID !== 5){
         if (PlatformID === 4 || PlatformID === 6 || PlatformID === 7) { //ANDROID/Playbook/Blackberry
             NativeAudio.playSound(name, false);
@@ -899,5 +899,6 @@ function playSound(name)
             }
         }
     }
+
 }
 

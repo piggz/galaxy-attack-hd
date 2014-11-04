@@ -12,8 +12,8 @@
 
 #ifdef Q_OS_ANDROID
 #include <androidaudio.h>
-#include "scoreloop/scoreloop.h"
 #include "androidiap.h"
+#include "gamecircleleaderboard.h"
 #endif
 
 #ifdef Q_OS_PLAYBOOK
@@ -34,7 +34,7 @@
 #define VER_(x)	VER1_(x)
 #define VER VER_(MYVERSION)
 
-#ifdef Q_OS_ANDROID
+#if 0
 #include <jni.h>
 
 static JavaVM* jvm;
@@ -86,8 +86,8 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_ANDROID
 
-    JNIEnv* env;
-    jvm->AttachCurrentThread(&env, NULL);
+    //JNIEnv* env;
+    //jvm->AttachCurrentThread(&env, NULL);
 
     AndroidAudio *androidAudio = AndroidAudio::instance();
     viewer.rootContext()->setContextProperty("NativeAudio", androidAudio);
@@ -95,11 +95,14 @@ int main(int argc, char *argv[])
     NullGameController gameController;
     viewer.rootContext()->setContextProperty("GamepadController",  &gameController);
 
-    Scoreloop *scoreloop = new Scoreloop();
-    viewer.rootContext()->setContextProperty("ScoreLoop", scoreloop);
+    //Scoreloop *scoreloop = new Scoreloop();
+    //viewer.rootContext()->setContextProperty("ScoreLoop", scoreloop);
 
     AndroidIAP *iap = new AndroidIAP();
     viewer.rootContext()->setContextProperty("IAP", iap);
+
+    GameCircleLeaderboard *gameCircle = new GameCircleLeaderboard();
+    viewer.rootContext()->setContextProperty("GameCircle", gameCircle);
 
     viewer.engine()->setBaseUrl(QUrl::fromLocalFile("/"));
     viewer.setSource(QUrl("assets:/qml/galaxy-attack-hd/main-android.qml"));
@@ -137,6 +140,12 @@ int main(int argc, char *argv[])
 
     qDebug() << "showing..";
     viewer.showExpanded();
+#elif defined(MER_EDITION_SAILFISH)
+    NullGameController gameController;
+    viewer.rootContext()->setContextProperty("GamepadController",  &gameController);
+
+    viewer.setMainQmlFile(QLatin1String("qml/galaxy-attack-hd/main-sailfish.qml"));
+    viewer.showFullScreen();
 #else
     //viewer.engine()->addImportPath(QString("/opt/qtm12/imports"));
     //viewer.setOrientation(QmlApplicationViewer::ScreenOrientationLockLandscape);
@@ -146,7 +155,7 @@ int main(int argc, char *argv[])
     viewer.setMainQmlFile(QLatin1String("qml/galaxy-attack-hd/main.qml"));
     viewer.setWidth(800);
     viewer.setHeight(480);
-    viewer.showExpanded();
+
 #endif
 
 

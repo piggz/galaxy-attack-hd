@@ -6,24 +6,22 @@ Item {
 
     state: "FRAME0"
     width: Sizer.alien3width()
-    height: Sizer.alien3height()
+    height: alien3frame1.height
 
     property int pointsAwarded: 10
 
     Image {
         id: alien3frame1
-        source: "pics/greenship1.png"
+        source: "pics/alien3.png"
         width: parent.width
-        height: parent.height
         fillMode: Image.PreserveAspectFit
         smooth: false
         }
 
     Image {
         id: alien3frame2
-        source: "pics/greenship1.png"
+        source: "pics/alien3.png"
         width: parent.width
-        height: parent.height
         fillMode: Image.PreserveAspectFit
         smooth: false
         }

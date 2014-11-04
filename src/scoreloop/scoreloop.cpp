@@ -6,7 +6,7 @@ QVariantList Scoreloop::leaderboardData;
 SC_ScoresController_h Scoreloop::mScoresController;
 
 #ifdef Q_OS_ANDROID
-#include <5.2.0/QtGui/qpa/qplatformnativeinterface.h>
+#include <5.3.2/QtGui/qpa/qplatformnativeinterface.h>
 #include <QApplication>
 static void SC_EventNotifier(void *eventNotifierContext) { }
 #endif
