@@ -1,6 +1,6 @@
 package uk.co.piggz.galaxy_attack_hd;
 
-import uk.co.piggz.galaxy_attack_hd.PaymentService;
+import com.android.vending.billing.*;
 import org.qtproject.qt5.android.bindings.QtApplication;
 import org.qtproject.qt5.android.bindings.QtActivity;
 import android.util.Log;
@@ -19,15 +19,14 @@ import com.amazon.ags.api.*;
 import java.util.EnumSet;
 import static uk.co.piggz.galaxy_attack_hd.GalaxyAttackUtils.getErrorMessage;
 
-public class GalaxyAttackHDActivity extends QtActivity implements ServiceConnection
+public class GalaxyAttackHDActivity extends QtActivity
 {
     private static GalaxyAttackHDActivity m_instance;
-
-    //private IInAppBillingService m_service;
-    private final PaymentService mService = new PaymentService();
     public static final int TOAST_DURATION = 1500;
+    private IInAppBillingService m_service;
+    //reference to the agsClient
+    AmazonGamesClient agsClient;
 
-/*
     private ServiceConnection m_serviceConnection = new ServiceConnection() {
        @Override
        public void onServiceDisconnected(ComponentName name)
@@ -41,31 +40,11 @@ public class GalaxyAttackHDActivity extends QtActivity implements ServiceConnect
            m_service = IInAppBillingService.Stub.asInterface(service);
        }
     };
-  */
-        @Override
-        public void onServiceConnected(final ComponentName name, final IBinder service) {
-                Log.d(QtApplication.QtTAG, "com.nokia.example.paymentoneapk.PaymentOneAPKActivity.onServiceConnected");
-
-                mService.setService(this, service);
-
-                //mapProductsSkus();
-
-                checkIfBillingIsSupported();
-        }
-
-        @Override
-        public void onServiceDisconnected(final ComponentName name) {
-                mService.clearService();
-        }
-
 
     public GalaxyAttackHDActivity()
     {
         m_instance = this;
     }
-
-    //reference to the agsClient
-    AmazonGamesClient agsClient;
 
     AmazonGamesCallback callback = new AmazonGamesCallback() {
             @Override
@@ -75,6 +54,7 @@ public class GalaxyAttackHDActivity extends QtActivity implements ServiceConnect
             @Override
             public void onServiceReady(AmazonGamesClient amazonGamesClient) {
                 agsClient = amazonGamesClient;
+                agsClient.initializeJni();
                 Log.e("-----AGS Service Ready", "---");
             }
     };
@@ -90,17 +70,13 @@ public class GalaxyAttackHDActivity extends QtActivity implements ServiceConnect
         AmazonGamesClient.initialize(this, callback, myGameFeatures);
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
-        //bindService(new Intent("com.android.vending.billing.InAppBillingService.BIND"),
-        //            m_serviceConnection, Context.BIND_AUTO_CREATE);
-
-        final Intent intent = mService.getServiceIntent(this);
-        bindService(intent, this, Context.BIND_AUTO_CREATE);
+        bindService(new Intent("com.android.vending.billing.InAppBillingService.BIND"),
+                    m_serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -108,7 +84,17 @@ public class GalaxyAttackHDActivity extends QtActivity implements ServiceConnect
     {
         super.onDestroy();
 
-        unbindService(this);
+        unbindService(m_serviceConnection);
+    }
+
+    private static native void activityStopped();
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+
+ //       activityStopped();
     }
 
     @Override
@@ -146,13 +132,13 @@ public class GalaxyAttackHDActivity extends QtActivity implements ServiceConnect
     {
         Log.e(QtApplication.QtTAG, "In purhaseItem");
 
-        if (m_instance.mService == null) {
+        if (m_instance.m_service == null) {
             Log.e(QtApplication.QtTAG, "Buying item failed: No billing service");
             return;
         }
 
         try {
-            Bundle buyIntentBundle = m_instance.mService.getBuyIntent(3,
+            Bundle buyIntentBundle = m_instance.m_service.getBuyIntent(3,
                                                                        m_instance.getPackageName(),
                                                                        itemName,
                                                                        "inapp",
@@ -181,15 +167,15 @@ public class GalaxyAttackHDActivity extends QtActivity implements ServiceConnect
     {
         Log.e(QtApplication.QtTAG, "In checkItemPurhased");
         int purchased = -1;
-        if (m_instance.mService == null) {
+        if (m_instance.m_service == null) {
             Log.e(QtApplication.QtTAG, "Check game failed: No billing service");
             return purchased;
         }
 
         try {
-            Bundle ownedItems = m_instance.mService.getPurchases(3, m_instance.getPackageName(),
+            Bundle ownedItems = m_instance.m_service.getPurchases(3, m_instance.getPackageName(),
                                                                        "inapp",
-                                                                       null, null);
+                                                                       null);
            int response = ownedItems.getInt("RESPONSE_CODE");
            if (response == 0) {
               ArrayList<String> ownedSkus = ownedItems.getStringArrayList("INAPP_PURCHASE_ITEM_LIST");
@@ -218,40 +204,15 @@ public class GalaxyAttackHDActivity extends QtActivity implements ServiceConnect
         return purchased;
     }
 
-        private void checkIfBillingIsSupported() {
-                Log.d(QtApplication.QtTAG, "com.nokia.example.paymentoneapk.PaymentOneActivity.checkIfBillingIsSupported");
+    protected void toastMessage(final String message) {
 
-                final int result;
-                try {
-                        result = mService.isBillingSupported(3, getPackageName(), "inapp");
+            runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                            Toast.makeText(getApplicationContext(), message, TOAST_DURATION).show();
+                    }
+            });
 
-                } catch (final RemoteException e) {
-                        Log.e(QtApplication.QtTAG, "error while isBillingSupported", e);
-                        toastMessage("Got an exception while consuming");
-
-                        return;
-                }
-
-                if (result != GalaxyAttackUtils.RESULT_OK) {
-                        toastMessage(String.format("Billing is not supported: %s", getErrorMessage(result)));
-
-                        Log.e(QtApplication.QtTAG, String.format("result = %d : %s", result, getErrorMessage(result)));
-
-                        return;
-                }
-
-                //queryProductDetails();
-        }
-
-        protected void toastMessage(final String message) {
-
-                runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                                Toast.makeText(getApplicationContext(), message, TOAST_DURATION).show();
-                        }
-                });
-
-        }
+    }
 
 }

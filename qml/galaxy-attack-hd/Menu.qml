@@ -93,8 +93,26 @@ Rectangle {
 
         onMenuItemClicked: {
             menupanel.onScreen = false;
-            GameCircle.showLeaderBoard();
-            //scoreloopBoard.onScreen = !scoreloopBoard.onScreen;
+            GameCircle.showLeaderBoard("galaxy_attack_hd_leaderboard_0");
+        }
+    }
+
+
+    MenuItem {
+        id: gameCircleItem
+        height: Helper.mmToPixels(8)
+        visible: PlatformID !== 8
+        menuImage: "pics/agc_icon_RGB_full_clr.png"
+        menuText: "Game Circle"
+        menuColor: selectedItem == 3 ? "white" : foreground
+        anchors.top: visible ? globalScoreItem.bottom : settingsItem.bottom
+        anchors.left: parent.left
+        anchors.topMargin: 10
+        anchors.leftMargin: 30
+
+        onMenuItemClicked: {
+            menupanel.onScreen = false;
+            GameCircle.showGameCircle();
         }
     }
 
@@ -104,7 +122,7 @@ Rectangle {
         menuImage: "pics/x.svg"
         menuText: "Exit"
         menuColor: selectedItem == 4 ? "white" : foreground
-        anchors.top: globalScoreItem.bottom
+        anchors.top: gameCircleItem.bottom
         anchors.left: parent.left
         anchors.topMargin: 10
         anchors.leftMargin: 30

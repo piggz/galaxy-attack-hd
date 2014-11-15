@@ -3,8 +3,11 @@
 
 #include <QObject>
 #include "LeaderboardsClientInterface.h"
+#include "GameCircleClientInterface.h"
 
-class GameCircleLeaderboard : public QObject
+using namespace AmazonGames;
+
+class GameCircleLeaderboard : public QObject, public ILeaderboardSubmitScoreCb, public IShowGameCircleCb
 {
     Q_OBJECT
 public:
@@ -13,10 +16,24 @@ public:
 signals:
 
 public slots:
-    void showLeaderBoard();
+    void showLeaderBoards();
+    void showLeaderBoard(const QByteArray &leaderboard);
+    void submitScore(const QByteArray &leaderboard, long long score);
+
+    void showGameCircle();
 
 private:
     AmazonGames::LeaderboardsClientInterface m_interface;
+    AmazonGames::GameCircleClientInterface m_gameCircle;
+
+    virtual void onSubmitScoreCb(
+            ErrorCode errorCode,
+            const SubmitScoreResponse* submitScoreResponse,
+            int developerTag);
+
+    virtual void onShowGameCircleCb(ErrorCode errorCode,
+                                    int developerTag);
+
 };
 
 #endif // GAMECIRCLELEADERBOARD_H

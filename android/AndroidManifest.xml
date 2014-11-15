@@ -1,14 +1,12 @@
 <?xml version="1.0"?>
-<manifest android:installLocation="auto" android:versionName="0.9.9.4" package="uk.co.piggz.galaxy_attack_hd" xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="25">
+<manifest android:installLocation="auto" android:versionName="0.9.9.7" package="uk.co.piggz.pgz_spaceinvaders" xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="27">
     <application android:label="Galaxy Attack HD" android:name="uk.co.piggz.galaxy_attack_hd.GalaxyAttackHDApplication" android:hardwareAccelerated="true" android:icon="@drawable/icon">
-    <activity android:name="com.amazon.ags.html5.overlay.GameCircleUserInterface" android:theme="@style/GCOverlay"></activity>
-        <activity android:label="Galaxy Attack HD" android:screenOrientation="landscape" android:name="uk.co.piggz.galaxy_attack_hd.GalaxyAttackHDActivity" android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation">
+        <activity android:label="Galaxy Attack HD" android:screenOrientation="landscape" android:name="uk.co.piggz.galaxy_attack_hd.GalaxyAttackHDActivity" android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation" android:hardwareAccelerated="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
-                <data android:host="uk.co.piggz.galaxy_attack_hd" android:scheme="amzn" />
             </intent-filter>
-            <meta-data android:name="android.app.lib_name" android:value="-- %%INSERT_APP_LIB_NAME%% --"/>
+            <meta-data android:name="android.app.lib_name" android:value="galaxy-attack-hd"/>
             <meta-data android:resource="@array/qt_sources" android:name="android.app.qt_sources_resource_id"/>
             <meta-data android:name="android.app.repository" android:value="default"/>
             <meta-data android:resource="@array/qt_libs" android:name="android.app.qt_libs_resource_id"/>
@@ -32,9 +30,31 @@
             <meta-data android:resource="@layout/splash" android:name="android.app.splash_screen"/>
             <!-- Splash screen -->
         </activity>
-        <activity android:name="com.amazon.ags.html5.overlay.GameCircleAlertUserInterface" android:theme="@style/GCAlert" android:hardwareAccelerated="false"></activity>
+        <activity android:name="com.amazon.ags.html5.overlay.GameCircleUserInterface" android:theme="@style/GCOverlay" android:hardwareAccelerated="false">
+            <meta-data android:name="android.app.lib_name" android:value="galaxy-attack-hd"/>
+        </activity>
+        <activity android:name="com.amazon.identity.auth.device.authorization.AuthorizationActivity" android:theme="@android:style/Theme.NoDisplay" android:allowTaskReparenting="true" android:launchMode="singleTask">
+          <intent-filter>
+             <action android:name="android.intent.action.VIEW"/>
+             <category android:name="android.intent.category.DEFAULT"/>
+             <category android:name="android.intent.category.BROWSABLE"/>
+             <data android:host="uk.co.piggz.pgz_spaceinvaders" android:scheme="amzn"/>
+          </intent-filter>
+        <meta-data android:name="android.app.lib_name" android:value="galaxy-attack-hd"/>
+        </activity>
+        <activity android:name="com.amazon.ags.html5.overlay.GameCircleAlertUserInterface" android:theme="@style/GCAlert" android:hardwareAccelerated="false">
+            <meta-data android:name="android.app.lib_name" android:value="galaxy-attack-hd"/>
+        </activity>
+        <receiver android:name="com.amazon.identity.auth.device.authorization.PackageIntentReceiver" android:enabled="true">
+          <intent-filter>
+             <action android:name="android.intent.action.PACKAGE_INSTALL"/>
+             <action android:name="android.intent.action.PACKAGE_ADDED"/>
+             <data android:scheme="package"/>
+          </intent-filter>
+        </receiver>
+
     </application>
-    <uses-sdk android:targetSdkVersion="16" android:minSdkVersion="14"/>
+    <uses-sdk android:targetSdkVersion="14" android:minSdkVersion="14"/>
     <supports-screens android:normalScreens="true" android:smallScreens="true" android:largeScreens="true" android:anyDensity="true"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="com.android.vending.BILLING"/>

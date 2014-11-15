@@ -3,7 +3,7 @@ folder_01.source = qml/galaxy-attack-hd
 folder_01.target = qml
 DEPLOYMENTFOLDERS = folder_01
 
-VERSION = 0.9.9.5
+VERSION = 0.9.9.7
 DEFINES+="MYVERSION=$${VERSION}"
 
 # Additional import path used to resolve QML modules in Creator's code model
@@ -30,23 +30,14 @@ SOURCES += src/main.cpp \
     src/Bunker.cpp \
     src/Helper.cpp \
     src/BunkerFactory.cpp \
-    src/scoremodel.cpp \
-    src/gamecircleleaderboard.cpp
-
+    src/scoremodel.cpp
 
 HEADERS += \
     src/Bunker.h \
     src/Helper.h \
     src/BunkerFactory.h \
     src/scoremodel.h \
-    src/pgz_platform.h \
-    android/jni/includes/AchievementsClientInterface.h \
-    android/jni/includes/AGSClientCommonInterface.h \
-    android/jni/includes/GameCircleClientInterface.h \
-    android/jni/includes/LeaderboardsClientInterface.h \
-    android/jni/includes/PlayerClientInterface.h \
-    android/jni/includes/WhispersyncClientInterface.h \
-    src/gamecircleleaderboard.h
+    src/pgz_platform.h
 
 !android {
 !qnx
@@ -67,8 +58,17 @@ android {
     QT += multimedia \
           androidextras
 
-    SOURCES += src/androidiap.cpp
-    HEADERS += src/androidiap.h
+    SOURCES += src/androidiap.cpp \
+    src/gamecircleleaderboard.cpp
+
+    HEADERS += src/androidiap.h \
+    android/jni/includes/AchievementsClientInterface.h \
+    android/jni/includes/AGSClientCommonInterface.h \
+    android/jni/includes/GameCircleClientInterface.h \
+    android/jni/includes/LeaderboardsClientInterface.h \
+    android/jni/includes/PlayerClientInterface.h \
+    android/jni/includes/WhispersyncClientInterface.h \
+    src/gamecircleleaderboard.h
 }
 
 #Add native sound support for playbook
@@ -103,11 +103,8 @@ OTHER_FILES += \
     android/AndroidManifest.xml \
     android/src/uk/co/piggz/galaxy_attack_hd/GalaxyAttackHDActivity.java \
     android/src/uk/co/piggz/galaxy_attack_hd/GalaxyAttackHDApplication.java \
-    qml/galaxy-attack-hd/PGZDialog.qml \
     android/src/com/android/vending/billing/IInAppBillingService.aidl \
-    android/src/com/nokia/payment/iap/aidl/INokiaIAPService.aidl \
     android/src/uk/co/piggz/galaxy_attack_hd/GalaxyAttackUtils.java \
-    android/src/uk/co/piggz/galaxy_attack_hd/PaymentService.java \
     galaxy-attack-hd.desktop \
     galaxy-attack-512.png \
     galaxy-attack-480.png \
@@ -116,17 +113,13 @@ OTHER_FILES += \
     galaxy-attack-86.png  \
     rpm/galaxy-attack-hd.yaml \
     rpm/galaxy-attack-hd.spec \
-    android/libs/libAmazonGamesJni.so \
     android/assets/api_key.txt \
     android/ant.properties
 
-
-#ANDROID_EXTRA_LIBS = /home/piggz/sdks/Qt5.2.1/5.2.1/android_armv7/plugins/sensors/libqtsensors_android.so \
-#/home/piggz/sdks/Qt5.2.1/5.2.1/android_armv7/plugins/sensors/libqtsensors_generic.so \
-#/home/piggz/sdks/Qt5.2.1/5.2.1/android_armv7/lib/libQt5Sensors.so \
-#/home/piggz/sdks/Qt5.2.1/5.2.1/android_armv7/lib/libQt5Multimedia.so
-
-ANDROID_EXTRA_LIBS = /home/piggz/projects/galaxy-attack-hd/android/jni/libs/libAmazonGamesJni.so
-
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
+contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
+    ANDROID_EXTRA_LIBS = \
+        $$PWD/android/jni/libs/libAmazonGamesJni.so
+}
 

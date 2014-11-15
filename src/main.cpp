@@ -34,30 +34,13 @@
 #define VER_(x)	VER1_(x)
 #define VER VER_(MYVERSION)
 
-#if 0
-#include <jni.h>
+//[un]comment this line for amazon builds
+#define AMAZON_DEVICE 1
 
-static JavaVM* jvm;
-
-static JNINativeMethod methods[] = {
-    {"itemPurchased", "(Ljava/lang/String;I)V", (void *)itemPurchased}
-};
-
-jint JNICALL JNI_OnLoad(JavaVM *vm, void *)
-{
-    JNIEnv *env;
-    jvm = vm;
-    if (vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_4) != JNI_OK)
-        return JNI_FALSE;
-
-    jclass clazz = env->FindClass("uk/co/piggz/galaxy_attack_hd/GalaxyAttackHDActivity");
-    if (env->RegisterNatives(clazz, methods, sizeof(methods) / sizeof(methods[0])) < 0)
-        return JNI_FALSE;
-
-    return JNI_VERSION_1_6;
-
-}
-
+#ifdef AMAZON_DEVICE
+const char* ANDROID_MARKET = "AMAZON";
+#else
+const char* ANDROID_MARKET = "GOOGLE";
 #endif
 
 int main(int argc, char *argv[])
@@ -85,18 +68,11 @@ int main(int argc, char *argv[])
     viewer.setResizeMode(QQuickView::SizeRootObjectToView);
 
 #ifdef Q_OS_ANDROID
-
-    //JNIEnv* env;
-    //jvm->AttachCurrentThread(&env, NULL);
-
     AndroidAudio *androidAudio = AndroidAudio::instance();
     viewer.rootContext()->setContextProperty("NativeAudio", androidAudio);
 
     NullGameController gameController;
     viewer.rootContext()->setContextProperty("GamepadController",  &gameController);
-
-    //Scoreloop *scoreloop = new Scoreloop();
-    //viewer.rootContext()->setContextProperty("ScoreLoop", scoreloop);
 
     AndroidIAP *iap = new AndroidIAP();
     viewer.rootContext()->setContextProperty("IAP", iap);
@@ -104,11 +80,12 @@ int main(int argc, char *argv[])
     GameCircleLeaderboard *gameCircle = new GameCircleLeaderboard();
     viewer.rootContext()->setContextProperty("GameCircle", gameCircle);
 
+    viewer.rootContext()->setContextProperty("ANDROID_MARKET", ANDROID_MARKET);
+
     viewer.engine()->setBaseUrl(QUrl::fromLocalFile("/"));
     viewer.setSource(QUrl("assets:/qml/galaxy-attack-hd/main-android.qml"));
 
     viewer.showFullScreen();
-
 #elif Q_OS_BLACKBERRY_TABLET
     qDebug() << "On a playbook!";
     

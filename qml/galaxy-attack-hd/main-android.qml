@@ -141,16 +141,6 @@ Rectangle {
         }
     }
 
-    Timer {
-        id: scoreloopTimer
-        interval: 500
-        repeat: true
-        running: true
-        onTriggered: {
-            ScoreLoop.processEvents();
-        }
-    }
-
     /*
     CloseButton {
         id: closeButton
@@ -321,16 +311,6 @@ Rectangle {
         }
     }
 
-    ScoreLoopBoard {
-        id:scoreloopBoard
-        z:8
-        onScreen: false
-
-        onExitClicked: {
-            onScreen = false;
-        }
-    }
-
     Bunker {
         id: bunker1
         x: Sizer.bunkerX(1);
@@ -456,40 +436,43 @@ Rectangle {
 
     }
 
+    //Play button
     ImageButton {
-        id: iapButton
-        image: "pics/buy_full_game.png"
+        id: buttonPlay
         width: Helper.mmToPixels(9);
         height: Helper.mmToPixels(9);
         anchors.right: infoImage.left;
         anchors.rightMargin: 30
         anchors.verticalCenter: parent.verticalCenter
+        visible: gameState === "NOTRUNNING"
+
+        image: ANDROID_MARKET === "AMAZON" ? "pics/amazon_store.png": "pics/play_store.png"
+
+        onClicked: {
+            if (ANDROID_MARKET === "AMAZON") {
+                Qt.openUrlExternally("amzn://apps/android?s=uk.co.piggz&showAll=1");
+            } else {
+                Qt.openUrlExternally("market://search?q=pub:Adam Pigg");
+            }
+        }
+    }
+
+    ImageButton {
+        id: iapButton
+        image: "pics/buy_full_game.png"
+        width: Helper.mmToPixels(9);
+        height: Helper.mmToPixels(9);
+        anchors.right: buttonPlay.left;
+        anchors.rightMargin: 30
+        anchors.verticalCenter: parent.verticalCenter
         smooth: false
-        visible: gameState !== "RUNNING" && !optFullGameBought
+        visible: gameState == "NOTRUNNING" && !optFullGameBought && ANDROID_MARKET === "GOOGLE"
 
         onClicked: {
             buyDialog.onScreen = true;
         }
 
     }
-
-    //Play button
-    ImageButton {
-        id: buttonPlay
-        width: Helper.mmToPixels(9);
-        height: Helper.mmToPixels(9);
-        anchors.right: iapButton.left;
-        anchors.rightMargin: 30
-        anchors.verticalCenter: parent.verticalCenter
-        visible: gameState === "NOTRUNNING"
-
-        image: "pics/play_store.png"
-
-        onClicked: {
-            Qt.openUrlExternally("market://search?q=pub:Adam Pigg");
-        }
-    }
-
     InfoMessage {
         id: infoMessage
         anchors.centerIn: parent
@@ -515,7 +498,7 @@ Rectangle {
         NativeAudio.registerSound("assets:/qml/galaxy-attack-hd/sounds/invaderkilled.wav.pcm", "killed");
         NativeAudio.registerSound("assets:/qml/galaxy-attack-hd/sounds/ufo_lowpitch.wav.pcm", "mystery");
 
-        if (IAP.checkItemPurchased("full_game") === 0) {
+        if (IAP.checkItemPurchased("full_game") === 0 || ANDROID_MARKET === "AMAZON") {
             optFullGameBought = true;
         } else {
             optFullGameBought = false;
@@ -610,13 +593,14 @@ Rectangle {
 
     function addNewScore(level, score) {
         ScoreModel.addScore(score, "default", "Galaxy Attack HD", 1, level, nowString());
+        GameCircle.submitScore("galaxy_attack_hd_leaderboard_0", ScoreModel.bestScore());
     }
 
     function loadSettings(){
         optUseOSC = Helper.getBoolSetting("bUseOSC", false);
         optLeftHandedOSC = Helper.getBoolSetting("bLeftHandOSC", false);
         optAlternateAxis = Helper.getBoolSetting("bAlternateAxis", false);
-        optReverseAxis = Helper.getBoolSetting("bReverseAxis", false); //true for kindle, false otherwise
+        optReverseAxis = Helper.getBoolSetting("bReverseAxis", ANDROID_MARKET === "GOOGLE" ? false : true); //true for kindle, false otherwise
         optFlashOnFire = Helper.getBoolSetting("bFlashOnFire", true);
         optSFX = Helper.getBoolSetting("bSFX", true);
     }
@@ -694,10 +678,6 @@ Rectangle {
     }
 
     function handleBack() {
-        if (scoreloopBoard.onScreen) {
-            scoreloopBoard.onScreen = false;
-            return;
-        }
         if (hiscorepanel.onScreen) {
             hiscorepanel.onScreen = false;
             return;
