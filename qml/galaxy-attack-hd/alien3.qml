@@ -1,4 +1,6 @@
 import QtQuick 2.0
+import QtQuick.Particles 2.0
+
 import "sizer.js" as Sizer
 
 Item {
@@ -25,6 +27,19 @@ Item {
         fillMode: Image.PreserveAspectFit
         smooth: false
         }
+
+    BlockEmitter {
+        jewel: alien3
+        id: particles
+        system: board.particleSystem
+        group: "red"
+        anchors.fill: parent
+    }
+
+    function explode() {
+        particles.pulse(150);
+        alien3.destroy(150);
+    }
 
     states: [
         State {

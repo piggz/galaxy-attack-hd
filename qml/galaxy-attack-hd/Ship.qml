@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtQuick.Particles 2.0
 
 Item {
     id: ship
@@ -14,6 +15,17 @@ Item {
         fillMode: Image.Stretch
     }
 
+    BlockEmitter {
+        jewel: ship
+        id: particles
+        system: board.particleSystem
+        group: "blue"
+        anchors.fill: parent
+    }
+
+    function explode() {
+        particles.pulse(200);
+    }
 
     function reset()  {
         ship.visible = true;

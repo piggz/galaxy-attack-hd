@@ -283,11 +283,10 @@ function destroyLivesIndication() {
 
 function shipHit() {
     ship.visible = false;
-    explosion.x = ship.x - (explosion.width - ship.width) /2;
-    explosion.y = ship.y - (explosion.height - ship.height) /2;
-    explosion.play();
 
     playSound("explosion");
+
+    ship.explode();
 
     cleanupBombs()
     if (mysteryShip != null){
@@ -494,14 +493,8 @@ function checkBulletAlienCollision()
                     scoretext.text = "Score: " + score;
                     bullet.y = -bullet.height; //Move the bullet offscreen
 
-                    explosion.x = aliens[i].x - (explosion.width - aliens[i].width) /2;
-                    explosion.y = aliens[i].y - (explosion.height - aliens[i].height) /2;
-
-                    
-                    aliens[i].destroy();
+                    aliens[i].explode();
                     aliens[i] = null;
-
-                    explosion.play();
                     
                     if (alienanimation.interval > 100) { //Get faster when a alien is killed
                         alienanimation.interval -= 10;
@@ -525,14 +518,11 @@ function checkBulletAlienCollisionNew()
         scoretext.text = "Score: " + score;
         bullet.y = -bullet.height; //Move the bullet offscreen
 
-        explosion.x = collidingItems[0].x - (explosion.width - collidingItems[0].width) /2;
-        explosion.y = collidingItems[0].y - (explosion.height - collidingItems[0].height) /2;
-
         var idx = aliens.indexOf(collidingItems[0]);
         if (idx >= 0) {
+            aliens[idx].explode();
             aliens[idx] = null;
         }
-        collidingItems[0].destroy();
 
         if (alienanimation.interval > 100) { //Get faster when a alien is killed
             alienanimation.interval -= 10;
@@ -591,9 +581,8 @@ function checkBulletMysteryCollision()
                 bullet.y = -bullet.height; //Move the bullet offscreen
 
                 mysteryShip.visible = false;
-                explosion.x = mysteryShip.x - (explosion.width - mysteryShip.width) /2;
-                explosion.y = mysteryShip.y - (explosion.height - mysteryShip.height) /2;
-                explosion.play();
+
+                mysteryShip.explode()
             }
         }
     }
@@ -829,7 +818,6 @@ function mysteryShipHandling()
             mysteryShipDeployedThisLevel = true;
             component = Qt.createComponent("mystery.qml");
 
-
             mysteryShip = component.createObject(board);
             mysteryShip.x = board.width + 10;
             mysteryShip.y = topline.y + 5;
@@ -848,7 +836,6 @@ function mysteryShipHandling()
             mysteryShip = null;
         }
       }
-
     }
 }
 
@@ -873,7 +860,7 @@ function shouldDeployMysteryShip()
     if (enoughSpace == false) {
         return false;
     } else {
-        if (rand(30) === 1){
+        if (rand(40) === 1){
             return true;
         }
     }

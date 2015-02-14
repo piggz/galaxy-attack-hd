@@ -1,6 +1,7 @@
 import QtSensors 5.0
 import QtQuick 2.0
 import SpaceInvaders 1.0
+import QtQuick.Particles 2.0
 
 import "sizer.js" as Sizer;
 import "logic.js" as Logic
@@ -13,6 +14,7 @@ Rectangle {
     height:  480
     focus: true
 
+    property alias particleSystem: particleSystem
     property string gameState
     property string lastGameState;
 
@@ -340,14 +342,6 @@ Rectangle {
         height: Sizer.bunkerHeight()
     }
 
-    Explosion {
-        id: explosion
-        x: 0
-        y: 0
-        width: Sizer.alien1width() * 2;
-        height: width
-    }
-
     SpaceLogo {
         id: spacelogo
         y: board.height / 2 - 30 - height
@@ -484,6 +478,37 @@ Rectangle {
     PowerMessage {
         id: powerMessage
     }
+
+    ParticleSystem {
+        id: particleSystem;
+        anchors.fill: parent
+        z: 5
+        ImageParticle {
+            groups: ["red"]
+            system: particleSystem
+            color: Qt.darker("red");//Actually want desaturated...
+            source: "pics/particle-brick.png"
+            colorVariation: 0.4
+            alpha: 0.1
+        }
+        ImageParticle {
+            groups: ["blue"]
+            system: particleSystem
+            color: Qt.darker("blue");//Actually want desaturated...
+            source: "pics/particle-brick.png"
+            colorVariation: 0.4
+            alpha: 0.1
+        }
+        ImageParticle {
+            groups: ["purple"]
+            system: particleSystem
+            color: Qt.darker("#ff00ff");//Actually want desaturated...
+            source: "pics/particle-brick.png"
+            colorVariation: 0.4
+            alpha: 0.1
+        }
+    }
+
 
     //=====================Functions=========================
 

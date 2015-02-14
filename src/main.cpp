@@ -34,13 +34,37 @@
 #define VER_(x)	VER1_(x)
 #define VER VER_(MYVERSION)
 
-//[un]comment this line for amazon builds
-#define AMAZON_DEVICE 1
-
 #ifdef AMAZON_DEVICE
 const char* ANDROID_MARKET = "AMAZON";
 #else
 const char* ANDROID_MARKET = "GOOGLE";
+#endif
+
+#ifdef Q_OS_ANDROID
+#include <jni.h>
+
+static JavaVM* jvm;
+
+static JNINativeMethod methods[] = {
+    #ifndef AMAZON_DEVICE
+    {"itemPurchased", "(Ljava/lang/String;I)V", (void *)itemPurchased},
+    #endif
+};
+
+jint JNICALL JNI_OnLoad(JavaVM *vm, void *)
+{
+    JNIEnv *env;
+    jvm = vm;
+    if (vm->GetEnv(reinterpret_cast<void **>(&env), JNI_VERSION_1_4) != JNI_OK)
+        return JNI_FALSE;
+
+    jclass clazz = env->FindClass("uk/co/piggz/galaxy_attack_hd/GalaxyAttackHDActivity");
+    if (env->RegisterNatives(clazz, methods, sizeof(methods) / sizeof(methods[0])) < 0)
+        return JNI_FALSE;
+
+    return JNI_VERSION_1_6;
+}
+
 #endif
 
 int main(int argc, char *argv[])

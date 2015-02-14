@@ -1,4 +1,6 @@
 import QtQuick 2.0
+import QtQuick.Particles 2.0
+
 import "sizer.js" as Sizer
 
 Item {
@@ -17,5 +19,17 @@ Item {
         frameWidth: 141
         frameHeight: 82
         running: true
+    }
+
+    BlockEmitter {
+        jewel: mystery
+        id: particles
+        system: board.particleSystem
+        group: "purple"
+        anchors.fill: parent
+    }
+
+    function explode() {
+        particles.pulse(250);
     }
 }

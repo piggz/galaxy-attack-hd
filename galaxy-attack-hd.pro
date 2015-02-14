@@ -3,7 +3,7 @@ folder_01.source = qml/galaxy-attack-hd
 folder_01.target = qml
 DEPLOYMENTFOLDERS = folder_01
 
-VERSION = 0.9.9.7
+VERSION = 0.9.9.9
 DEFINES+="MYVERSION=$${VERSION}"
 
 # Additional import path used to resolve QML modules in Creator's code model
@@ -50,6 +50,7 @@ HEADERS += \
 }
 
 android {
+#    DEFINES += AMAZON_DEVICE
     #Include the android audio library
     include(src/androidaudio/androidaudio.pri)
     INCLUDEPATH += android/jni/includes/
