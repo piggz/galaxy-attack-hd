@@ -42,15 +42,15 @@ HEADERS += \
 !android {
 !qnx
  {
-     message(SailfishOS build)
+#     message(SailfishOS build)
 
-     DEFINES += MER_EDITION_SAILFISH
-     MER_EDITION = sailfish
+#     DEFINES += MER_EDITION_SAILFISH
+#     MER_EDITION = sailfish
 }
 }
 
 android {
-#    DEFINES += AMAZON_DEVICE
+    DEFINES += AMAZON_DEVICE
     #Include the android audio library
     include(src/androidaudio/androidaudio.pri)
     INCLUDEPATH += android/jni/includes/

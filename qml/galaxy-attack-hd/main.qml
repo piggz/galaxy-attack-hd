@@ -3,6 +3,7 @@ import QtSensors 5.0
 import QtQuick 2.0
 import QtMultimedia 5.0
 import SpaceInvaders 1.0
+import QtQuick.Particles 2.0
 
 import "sizer.js" as Sizer;
 import "logic.js" as Logic
@@ -14,9 +15,10 @@ Rectangle {
     color: "#000000"
     width: 854
     height:  480
-    rotation: 90
-    transformOrigin: Item.TopLeft
+    //rotation: 90
+    //transformOrigin: Item.TopLeft
 
+    property alias particleSystem: particleSystem
     property string gameState
     property string lastGameState;
 
@@ -160,8 +162,8 @@ Rectangle {
         id: menubutton
 
         source: "pics/menu.svg"
-        width: Helper.mmToPixels(8);
-        height: Helper.mmToPixels(6);
+        width: closeButton.width;
+        height: closeButton.height;
         anchors.right: closeButton .left
         anchors.rightMargin: closeButton.width
         anchors.top: parent.top
@@ -254,7 +256,7 @@ Rectangle {
     }
 
 
-    SettingsWindow {
+    SettingsAndroid {
         id:settingspanel;
         z: 10
         onScreen: false
@@ -299,29 +301,20 @@ Rectangle {
         height: Sizer.bunkerHeight()
     }
 
-    Explosion {
-        id: explosion
-        x: 0
-        y: 0
-        width: Sizer.alien1width() * 2;
-        height: Sizer.alien1height() * 2;
-    }
-
     SpaceLogo {
         id: spacelogo
-        anchors.verticalCenter: board.verticalCenter
-        anchors.verticalCenterOffset: -75
-        anchors.horizontalCenter: board.horizontalCenter
-        anchors.horizontalCenterOffset: -100
+        y: board.height / 2 - 30 - height
+        offScreenLocation: -width - 10
+        onScreenLocation: board.width / 2 - width + 50
     }
 
     InvadersLogo {
         id: invaderslogo
-        anchors.verticalCenter: board.verticalCenter
-        anchors.verticalCenterOffset: 75
-        anchors.horizontalCenter: board.horizontalCenter
-        anchors.horizontalCenterOffset: 100
+        y: board.height / 2 + 30
+        offScreenLocation: board.width + 10
+        onScreenLocation: board.width / 2 - 50
     }
+
 
     Hd {
         id: hdlogo
@@ -395,6 +388,36 @@ Rectangle {
         id: powerMessage
     }
 
+    ParticleSystem {
+        id: particleSystem;
+        anchors.fill: parent
+        z: 5
+        ImageParticle {
+            groups: ["red"]
+            system: particleSystem
+            color: Qt.darker("red");//Actually want desaturated...
+            source: "pics/particle-brick.png"
+            colorVariation: 0.4
+            alpha: 0.1
+        }
+        ImageParticle {
+            groups: ["blue"]
+            system: particleSystem
+            color: Qt.darker("blue");//Actually want desaturated...
+            source: "pics/particle-brick.png"
+            colorVariation: 0.4
+            alpha: 0.1
+        }
+        ImageParticle {
+            groups: ["purple"]
+            system: particleSystem
+            color: Qt.darker("#ff00ff");//Actually want desaturated...
+            source: "pics/particle-brick.png"
+            colorVariation: 0.4
+            alpha: 0.1
+        }
+    }
+
     //=====================Functions=========================
 
     function startupFunction() {
@@ -445,20 +468,34 @@ Rectangle {
             return;
         }
 
-        if (event.key == Qt.Key_P) {
-            if (gameState == "RUNNING") {
+        if (event.key === Qt.Key_P) {
+            if (gameState === "RUNNING") {
                 Logic.cmdPause();
-            } else if (gameState == "PAUSED") {
+            } else if (gameState === "PAUSED") {
                 Logic.cmdResume();
             }
-        } else if (event.key == Qt.Key_Q) {
+        } else if (event.key === Qt.Key_Q) {
             if (gameState != "NOTRUNNING") {
                 Logic.cmdDead();
             }
         } else if (event.key === Qt.Key_Left) {
-            Logic.scheduleDirection(-10);
+            event.accepted = true;
+            handleLeft();
         } else if (event.key === Qt.Key_Right) {
-            Logic.scheduleDirection(10);
+            event.accepted = true;
+            handleRight();
+        } else if (event.key === Qt.Key_Up) {
+            event.accepted = true;
+            handleUp();
+        } else if (event.key === Qt.Key_Down) {
+            event.accepted = true;
+            handleDown();
+        } else if (event.key === Qt.Key_Enter) {
+            event.accepted = true;
+            handleFire();
+        } else if ((event.key === Qt.Key_Menu) || (event.key === Qt.Key_M)) {
+            event.accepted = true;
+            handleMenu();
         } else if (event.key === Qt.Key_Space) {
             Logic.screenTap();
         }
@@ -518,5 +555,101 @@ Rectangle {
     }
 
 
+    function handleUp() {
+        if (gameState !== "RUNNING") {
+
+            if (settingspanel.onScreen) {
+                settingspanel.upPressed();
+                return;
+            }
+
+            if (menupanel.onScreen) {
+                menupanel.upPressed();
+                return;
+            }
+        }
+    }
+
+    function handleDown() {
+        if (gameState !== "RUNNING") {
+            if (settingspanel.onScreen) {
+                settingspanel.downPressed();
+                return;
+            }
+
+            if (menupanel.onScreen) {
+                menupanel.downPressed();
+                return;
+            }
+        }
+    }
+
+    function handleFire() {
+        if (settingspanel.onScreen) {
+            settingspanel.firePressed();
+        } else if (menupanel.onScreen) {
+            menupanel.firePressed();
+        } else if (exitDialog.onScreen){
+            exitDialog.firePressed();
+        } else {
+            Logic.screenTap();
+        }
+    }
+
+    function handleMenu() {
+        console.log(settingspanel.onScreen, settingspanel.animating);
+
+        if (settingspanel.onScreen) {
+            if (!settingspanel.animating) {
+                settingspanel.onScreen = false;
+            }
+            return;
+        }
+
+        if (!menupanel.animating) {
+            menupanel.onScreen = !menupanel.onScreen;
+            if (menupanel.onScreen && gameState == "RUNNING") {
+                Logic.cmdPause();
+            }
+        }
+    }
+
+    function handleBack() {
+        if (hiscorepanel.onScreen) {
+            hiscorepanel.onScreen = false;
+            return;
+        }
+        if (settingspanel.onScreen) {
+            settingspanel.onScreen = false;
+            return;
+        }
+        if (menupanel.onScreen) {
+            menupanel.onScreen = false;
+            return;
+        }
+
+        if (infoMessage.onScreen) {
+            infoMessage.onScreen = false;
+            return;
+        }
+
+        exitPressed();
+    }
+
+    function handleLeft() {
+        if (exitDialog.onScreen) {
+            exitDialog.leftPressed();
+            return;
+        }
+        Logic.scheduleDirection(-10);
+    }
+
+    function handleRight() {
+        if (exitDialog.onScreen) {
+            exitDialog.rightPressed();
+            return;
+        }
+        Logic.scheduleDirection(10);
+    }
 
 }

@@ -549,30 +549,49 @@ Rectangle {
     Keys.onEscapePressed:exitGame();
 
     Keys.onReleased: {
-        console.log(event.key);
+        if ((event.key === Qt.Key_Left) || (event.key === Qt.Key_Right)){
+            Logic.scheduleDirection(0);
+        }
     }
 
     Keys.onPressed: {
-        console.log(event.key);
         if (PlatformID === 4 && event.key === Qt.Key_Back) {
             event.accepted = true;
             handleBack();
             return;
         }
 
-        if (event.key == Qt.Key_P) {
+        if (event.key === Qt.Key_P) {
             event.accepted = true;
-            if (gameState == "RUNNING") {
+            if (gameState === "RUNNING") {
                 Logic.cmdPause();
-            } else if (gameState == "PAUSED") {
+            } else if (gameState === "PAUSED") {
                 Logic.cmdResume();
             }
-        } else if (event.key == Qt.Key_Q) {
+        } else if (event.key === Qt.Key_Q) {
             event.accepted = true;
 
             if (gameState != "NOTRUNNING") {
                 Logic.cmdDead();
             }
+        } else if (event.key === Qt.Key_Left) {
+            event.accepted = true;
+            handleLeft();
+        } else if (event.key === Qt.Key_Right) {
+            event.accepted = true;
+            handleRight();
+        } else if (event.key === Qt.Key_Up) {
+            event.accepted = true;
+            handleUp();
+        } else if (event.key === Qt.Key_Down) {
+            event.accepted = true;
+            handleDown();
+        } else if (event.key === Qt.Key_Enter) {
+            event.accepted = true;
+            handleFire();
+        } else if (event.key === Qt.Key_Menu) {
+            event.accepted = true;
+            handleMenu();
         }
     }
 
@@ -679,6 +698,8 @@ Rectangle {
             settingspanel.firePressed();
         } else if (menupanel.onScreen) {
             menupanel.firePressed();
+        } else if (exitDialog.onScreen){
+            exitDialog.firePressed();
         } else {
             Logic.screenTap();
         }
@@ -722,6 +743,22 @@ Rectangle {
         }
 
         exitPressed();
+    }
+
+    function handleLeft() {
+        if (exitDialog.onScreen) {
+            exitDialog.leftPressed();
+            return;
+        }
+        Logic.scheduleDirection(-10);
+    }
+
+    function handleRight() {
+        if (exitDialog.onScreen) {
+            exitDialog.rightPressed();
+            return;
+        }
+        Logic.scheduleDirection(10);
     }
 
 }

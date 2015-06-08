@@ -12,7 +12,7 @@ Rectangle {
 
     signal exitClicked
 
-    height: text2.y + text2.height + 50;
+    height: textdonate.y + textdonate.height + Sizer.largeFontSize() / 3
     width:  text2.width + 40
     color:  "black"
     border.color: foreground
@@ -37,7 +37,7 @@ Rectangle {
         text: "Galaxy Attack HD"
         anchors.top: parent.top
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 20
+        anchors.topMargin: Sizer.largeFontSize() / 3
         font.pixelSize: Sizer.largeFontSize()
         MouseArea {
             anchors.fill: parent;
@@ -53,8 +53,8 @@ Rectangle {
         menuColor: selectedItem == 1 ? "white" : foreground
         anchors.top: text1.bottom
         anchors.left: parent.left
-        anchors.topMargin: 10
-        anchors.leftMargin: 30
+        anchors.topMargin: Sizer.largeFontSize() / 3
+        anchors.leftMargin: Sizer.largeFontSize() / 3
 
         onMenuItemClicked: {
             menupanel.onScreen = false;
@@ -70,8 +70,8 @@ Rectangle {
         menuColor: selectedItem == 2 ? "white" : foreground
         anchors.top: settingsItem.bottom
         anchors.left: parent.left
-        anchors.topMargin: 10
-        anchors.leftMargin: 30
+        anchors.topMargin: Sizer.largeFontSize() / 3
+        anchors.leftMargin: Sizer.largeFontSize() / 3
 
         onMenuItemClicked: {
             menupanel.onScreen = false;
@@ -88,8 +88,8 @@ Rectangle {
         menuColor: selectedItem == 3 ? "white" : foreground
         anchors.top: visible ? hiScoreItem.bottom : settingsItem.bottom
         anchors.left: parent.left
-        anchors.topMargin: 10
-        anchors.leftMargin: 30
+        anchors.topMargin: Sizer.largeFontSize() / 3
+        anchors.leftMargin: Sizer.largeFontSize() / 3
 
         onMenuItemClicked: {
             menupanel.onScreen = false;
@@ -104,11 +104,11 @@ Rectangle {
         visible: PlatformID !== 8
         menuImage: "pics/agc_icon_RGB_full_clr.png"
         menuText: "Game Circle"
-        menuColor: selectedItem == 3 ? "white" : foreground
+        menuColor: selectedItem == 4 ? "white" : foreground
         anchors.top: visible ? globalScoreItem.bottom : settingsItem.bottom
         anchors.left: parent.left
-        anchors.topMargin: 10
-        anchors.leftMargin: 30
+        anchors.topMargin: Sizer.largeFontSize() / 3
+        anchors.leftMargin: Sizer.largeFontSize() / 3
 
         onMenuItemClicked: {
             menupanel.onScreen = false;
@@ -121,11 +121,11 @@ Rectangle {
         height: Helper.mmToPixels(8);
         menuImage: "pics/x.svg"
         menuText: "Exit"
-        menuColor: selectedItem == 4 ? "white" : foreground
+        menuColor: selectedItem == 5 ? "white" : foreground
         anchors.top: gameCircleItem.bottom
         anchors.left: parent.left
-        anchors.topMargin: 10
-        anchors.leftMargin: 30
+        anchors.topMargin: Sizer.largeFontSize() / 3
+        anchors.leftMargin: Sizer.largeFontSize() / 3
 
         onMenuItemClicked: {
             exitClicked();
@@ -135,11 +135,11 @@ Rectangle {
 
     Text {
         id: text2
-        color: selectedItem == 5 ? "white" : foreground
+        color: selectedItem == 6 ? "white" : foreground
         text: "http://piggz.co.uk/?q=content/galaxy-attack-hd"
         anchors.top: exitItem.bottom
         anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 20
+        anchors.topMargin: Sizer.largeFontSize() / 3
         font.pixelSize: Sizer.smallFontSize()
 
         MouseArea {
@@ -150,13 +150,13 @@ Rectangle {
 
     Text {
         id: textdonate
-        color: selectedItem == 6 ? "white" : foreground
+        color: selectedItem == 7 ? "white" : foreground
         text: "Donate"
-        anchors.bottom: parent.bottom
+        anchors.top: text2.bottom
         anchors.right: parent.right
         font.pixelSize: Sizer.largeFontSize()
-        anchors.bottomMargin: 5
-        anchors.rightMargin: 5
+        anchors.topMargin: Sizer.largeFontSize() / 3
+        anchors.rightMargin: Sizer.largeFontSize() / 3
         MouseArea {
             anchors.fill: parent;
             onClicked: Qt.openUrlExternally("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QVTJ5JNBQA72A");
@@ -165,7 +165,7 @@ Rectangle {
 
     function downPressed() {
         selectedItem++;
-        if (selectedItem > 6) {
+        if (selectedItem > 7) {
             selectedItem = 1;
         }
     }
@@ -173,7 +173,7 @@ Rectangle {
     function upPressed() {
         selectedItem--;
         if (selectedItem < 1) {
-            selectedItem = 6;
+            selectedItem = 7;
         }
     }
 
@@ -188,12 +188,15 @@ Rectangle {
             globalScoreItem.click();
         }
         if (selectedItem == 4) {
-            exitItem.click();
+            gameCircleItem.click();
         }
         if (selectedItem == 5) {
-            Qt.openUrlExternally(text2.text)
+            exitItem.click();
         }
         if (selectedItem == 6) {
+            Qt.openUrlExternally(text2.text)
+        }
+        if (selectedItem == 7) {
             Qt.openUrlExternally("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QVTJ5JNBQA72A");
         }
     }

@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Particles 2.0
+import "sizer.js" as Sizer;
 
 Item {
     id: ship
@@ -8,9 +9,9 @@ Item {
 
     Image {
         id: shipframe
-        width: 60
-        height: 30
-        source: "pics/ship.png"
+        width: Sizer.alien1width()
+        height: width/2
+        source: "pics/ship2.png"
         smooth: true
         fillMode: Image.Stretch
     }

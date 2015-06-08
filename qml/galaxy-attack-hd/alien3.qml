@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.4
 import QtQuick.Particles 2.0
 
 import "sizer.js" as Sizer
@@ -18,15 +18,7 @@ Item {
         width: parent.width
         fillMode: Image.PreserveAspectFit
         smooth: false
-        }
-
-    Image {
-        id: alien3frame2
-        source: "pics/alien3.png"
-        width: parent.width
-        fillMode: Image.PreserveAspectFit
-        smooth: false
-        }
+    }
 
     BlockEmitter {
         jewel: alien3
@@ -36,22 +28,18 @@ Item {
         anchors.fill: parent
     }
 
+    RotationAnimator {
+        target: alien3;
+        from: 0;
+        to: 360;
+        duration: 5000
+        running: true
+        loops: -1
+    }
+
     function explode() {
         particles.pulse(150);
         alien3.destroy(150);
     }
 
-    states: [
-        State {
-            name: "FRAME0"
-            PropertyChanges { target: alien3frame1; visible: true}
-            PropertyChanges { target: alien3frame2; visible: false}
-        },
-        State {
-            name: "FRAME1"
-            PropertyChanges { target: alien3frame1; visible: false}
-            PropertyChanges { target: alien3frame2; visible: true}
-        }
-    ]
-
-    }
+}

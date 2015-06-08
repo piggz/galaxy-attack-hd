@@ -154,8 +154,9 @@ int main(int argc, char *argv[])
     viewer.rootContext()->setContextProperty("GamepadController",  &gameController);
 
     viewer.setMainQmlFile(QLatin1String("qml/galaxy-attack-hd/main.qml"));
-    viewer.setWidth(800);
-    viewer.setHeight(480);
+    viewer.setWidth(1280);
+    viewer.setHeight(720);
+    viewer.show();
 
 #endif
 

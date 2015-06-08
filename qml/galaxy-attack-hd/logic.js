@@ -235,9 +235,9 @@ function screenTap() {
         }
     }
 
-    /*if (gameState == "NOTRUNNING") {
+    if (gameState == "NOTRUNNING") {
         cmdNewGame();
-    } else */if (gameState == "LIFELOST" || gameState == "PAUSED") {
+    } else if (gameState == "LIFELOST" || gameState == "PAUSED") {
         cmdResume();
     } else if (gameState == "LEVELCOMPLETE") {
         cmdStartNewLevel();
