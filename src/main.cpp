@@ -142,6 +142,7 @@ int main(int argc, char *argv[])
     qDebug() << "showing..";
     viewer.showExpanded();
 #elif defined(MER_EDITION_SAILFISH)
+#warning Doing a SFOS build :)
     NullGameController gameController;
     viewer.rootContext()->setContextProperty("GamepadController",  &gameController);
 

@@ -28,6 +28,8 @@ Rectangle {
     property bool optReverseAxis: false
     property bool optFullGameBought: false
 
+    property int selectedItem: 0
+
     property int axisModifier: optReverseAxis ? -1 : 1
 
     ColorAnimation on color {id:flashanim; from: "#999999"; to: "black"; duration: 200 }
@@ -80,7 +82,7 @@ Rectangle {
 
     Text {
         id: starttext
-        text: gameState === "NOTRUNNING" ? "Tap the green button to start!" : "Tap the screen or fire to continue"
+        text: gameState === "NOTRUNNING" ? "Tap the green button or press fire to start!" : "Tap the screen or press fire to continue"
         color: "#ffffff"
         anchors.horizontalCenter: board.horizontalCenter
         anchors.top: topline.bottom
@@ -412,25 +414,13 @@ Rectangle {
         anchors.left: parent.left
         anchors.leftMargin: 30
         anchors.verticalCenter: parent.verticalCenter
+        highlightColor: "#7DF9FF"
+        selected: selectedItem == 1
 
         onClicked: Logic.cmdNewGame()
     }
 
-    ImageButton {
-        id: infoImage
-        image: "pics/info.png"
-        width: Helper.mmToPixels(9);
-        height: Helper.mmToPixels(9);
-        anchors.right: parent.right
-        anchors.rightMargin: 30
-        anchors.verticalCenter: parent.verticalCenter
-        smooth: false
-        
-        onClicked: infoMessage.onScreen = true;
-
-    }
-
-    //Play button
+    //Store button
     ImageButton {
         id: buttonPlay
         width: Helper.mmToPixels(9);
@@ -439,6 +429,8 @@ Rectangle {
         anchors.rightMargin: 30
         anchors.verticalCenter: parent.verticalCenter
         visible: gameState === "NOTRUNNING"
+        highlightColor: "#7DF9FF"
+        selected: selectedItem == 2
 
         image: ANDROID_MARKET === "AMAZON" ? "pics/amazon_store.png": "pics/play_store.png"
 
@@ -449,6 +441,23 @@ Rectangle {
                 Qt.openUrlExternally("market://search?q=pub:Adam Pigg");
             }
         }
+    }
+
+    //Info button
+    ImageButton {
+        id: infoImage
+        image: "pics/info.png"
+        width: Helper.mmToPixels(9);
+        height: Helper.mmToPixels(9);
+        anchors.right: parent.right
+        anchors.rightMargin: 30
+        anchors.verticalCenter: parent.verticalCenter
+        smooth: false
+        highlightColor: "#7DF9FF"
+        selected: selectedItem == 3
+
+        onClicked: infoMessage.onScreen = true;
+
     }
 
     ImageButton {
@@ -540,8 +549,12 @@ Rectangle {
     }
 
     function exitGame(){
-        saveSettings()
-        Qt.quit();
+        if (gameState == "NOTRUNNING") {
+            saveSettings()
+            Qt.quit();
+        } else {
+            Logic.cmdDead();
+        }
     }
 
     Component.onCompleted: startupFunction();
@@ -551,11 +564,12 @@ Rectangle {
     Keys.onReleased: {
         if ((event.key === Qt.Key_Left) || (event.key === Qt.Key_Right)){
             Logic.scheduleDirection(0);
+            event.accepted = true;
         }
     }
 
     Keys.onPressed: {
-        if (PlatformID === 4 && event.key === Qt.Key_Back) {
+        if (event.key === Qt.Key_Back  || event.key === Qt.Key_B) {
             event.accepted = true;
             handleBack();
             return;
@@ -586,7 +600,7 @@ Rectangle {
         } else if (event.key === Qt.Key_Down) {
             event.accepted = true;
             handleDown();
-        } else if (event.key === Qt.Key_Enter) {
+        } else if (event.key === Qt.Key_Enter || event.key === Qt.Key_A) {
             event.accepted = true;
             handleFire();
         } else if (event.key === Qt.Key_Menu) {
@@ -700,8 +714,26 @@ Rectangle {
             menupanel.firePressed();
         } else if (exitDialog.onScreen){
             exitDialog.firePressed();
+        } else if (infoMessage.onScreen) {
+            infoMessage.clickedClose()
         } else {
-            Logic.screenTap();
+            if (gameState == "NOTRUNNING") {
+                switch(selectedItem) {
+                case 1:
+                    startImage.clicked();
+                    break;
+                case 2:
+                    buttonPlay.clicked();
+                    break;
+                case 3:
+                    infoImage.clicked();
+                    break;
+                default:
+                    Logic.screenTap();
+                }
+            } else {
+                Logic.screenTap();
+            }
         }
     }
 
@@ -750,12 +782,28 @@ Rectangle {
             exitDialog.leftPressed();
             return;
         }
+
+        if (gameState == "NOTRUNNING") {
+            selectedItem--;
+            if (selectedItem <= 0) {
+                selectedItem = 3
+            }
+            return;
+        }
+
         Logic.scheduleDirection(-10);
     }
 
     function handleRight() {
         if (exitDialog.onScreen) {
             exitDialog.rightPressed();
+            return;
+        }
+        if (gameState == "NOTRUNNING") {
+            selectedItem++;
+            if (selectedItem >= 4) {
+                selectedItem = 1
+            }
             return;
         }
         Logic.scheduleDirection(10);

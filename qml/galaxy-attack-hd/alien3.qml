@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.2
 import QtQuick.Particles 2.0
 
 import "sizer.js" as Sizer

@@ -5,7 +5,7 @@ Image {
     signal clicked
 
     source: "pics/x.svg"
-    width: 48
+    width: Helper.mmToPixels(5)
     height: width
 
     anchors.right: parent.right

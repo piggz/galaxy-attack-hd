@@ -3,7 +3,7 @@ folder_01.source = qml/galaxy-attack-hd
 folder_01.target = qml
 DEPLOYMENTFOLDERS = folder_01
 
-VERSION = 0.9.9.9
+VERSION = 1.0.0
 DEFINES+="MYVERSION=$${VERSION}"
 
 # Additional import path used to resolve QML modules in Creator's code model
@@ -39,15 +39,27 @@ HEADERS += \
     src/scoremodel.h \
     src/pgz_platform.h
 
-!android {
-!qnx
- {
-#     message(SailfishOS build)
+exists("/usr/lib/qt5/qml/Sailfish/Silica/SilicaGridView.qml"): {
+    message(SailfishOS build)
+    DEFINES += MER_EDITION_SAILFISH
+    #Tablet
+    DEFINES += MER_PPI=330
+    #Phone
+    #DEFINES += MER_PPI=245
 
-#     DEFINES += MER_EDITION_SAILFISH
-#     MER_EDITION = sailfish
-}
-}
+    MER_EDITION = sailfish
+
+    # QML files and folders
+    #qml.files = *.qml pages cover main.qml
+
+    # The .desktop file
+    desktop.files = galaxy-attack-hd.desktop
+
+    # Please do not modify the following line.
+    #include(../sailfishapplication/sailfishapplication.pri)
+
+    OTHER_FILES = qtinfo.yaml
+ }
 
 android {
     DEFINES += AMAZON_DEVICE

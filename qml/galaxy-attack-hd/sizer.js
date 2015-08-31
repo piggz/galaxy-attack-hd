@@ -78,6 +78,7 @@ function laserSpeed()
 
 function largeFontSize()
 {
+    //console.log("Large font size is ", board.width * 0.04)
     return board.width * 0.04;
     //return Helper.mmToPixels(6);
 }

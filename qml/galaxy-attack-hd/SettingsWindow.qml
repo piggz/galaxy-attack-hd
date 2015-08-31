@@ -30,67 +30,65 @@ Rectangle {
         anchors.fill: parent
     }
 
-    InvaderOption {
-        id: flashOption
-        optionText: "Flash on Fire"
-        optionColor: selectedItem == 1 ? "white" : foreground
-        height: 40
-        width: parent.width / 2
-        anchors.top: parent.top;
-        anchors.topMargin: 20
-        optionTextSize: Sizer.largeFontSize()
+    Column {
+        anchors.fill: parent
+        anchors.margins: Sizer.largeFontSize() / 3
+        spacing: Sizer.largeFontSize() / 3
 
-        onOptionClicked: {
-            optFlashOnFire = val;
-        }
-    }
+        InvaderOption {
+            id: flashOption
+            optionText: "Flash on Fire"
+            optionColor: selectedItem == 1 ? "white" : foreground
+            height: Sizer.largeFontSize() + 10
+            width: parent.width / 2
+            optionTextSize: Sizer.largeFontSize()
 
-    InvaderOption {
-        id: sfxOption
-        optionText: "Sound Effects"
-        optionColor: selectedItem == 2 ? "white" : foreground
-        height: 40
-        width: parent.width / 2
-        anchors.top: flashOption.bottom;
-        anchors.topMargin: 20
-        optionTextSize: Sizer.largeFontSize()
-
-        onOptionClicked: {
-            optSFX = val;
+            onOptionClicked: {
+                optFlashOnFire = val;
+            }
         }
 
-    }
+        InvaderOption {
+            id: sfxOption
+            optionText: "Sound Effects"
+            optionColor: selectedItem == 2 ? "white" : foreground
+            height: Sizer.largeFontSize() + 10
+            width: parent.width / 2
+            optionTextSize: Sizer.largeFontSize()
 
-    InvaderOption {
-        id: oscOption
-        optionText: "On-Screen Control"
-        optionColor: selectedItem == 3 ? "white" : foreground
-        height: 40
-        width: parent.width / 2
-        anchors.top: sfxOption.bottom;
-        anchors.topMargin: 20
-        optionTextSize: Sizer.largeFontSize()
+            onOptionClicked: {
+                optSFX = val;
+            }
 
-        onOptionClicked: {
-            optUseOSC = val;
         }
 
-    }
-    
-    InvaderOption {
-        id: lhOption
-        optionText: "Left Hand OSC"
-        optionColor: selectedItem == 4 ? "white" : foreground
-        height: 40
-        width: parent.width / 2
-        anchors.top: oscOption.bottom;
-        anchors.topMargin: 20
-        optionTextSize: Sizer.largeFontSize()
+        InvaderOption {
+            id: oscOption
+            optionText: "On-Screen Control"
+            optionColor: selectedItem == 3 ? "white" : foreground
+            height: Sizer.largeFontSize() + 10
+            width: parent.width / 2
+            optionTextSize: Sizer.largeFontSize()
 
-        onOptionClicked: {
-            optLeftHandedOSC = val;
+            onOptionClicked: {
+                optUseOSC = val;
+            }
+
         }
 
+        InvaderOption {
+            id: lhOption
+            optionText: "Left Hand OSC"
+            optionColor: selectedItem == 4 ? "white" : foreground
+            height: Sizer.largeFontSize() + 10
+            width: parent.width / 2
+            optionTextSize: Sizer.largeFontSize()
+
+            onOptionClicked: {
+                optLeftHandedOSC = val;
+            }
+
+        }
     }
     
     function startupFunction() {

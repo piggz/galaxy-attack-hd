@@ -64,7 +64,7 @@ Rectangle {
         color: "#ffffff"
         x: 2
         y: 2
-        font.pixelSize: closeButton.height - 10;
+        font.pixelSize: menuButton.height - 10;
     }
 
     Text {
@@ -73,7 +73,7 @@ Rectangle {
         color: "#ffffff"
         y: 2
         anchors.horizontalCenter: board.horizontalCenter
-        font.pixelSize: closeButton.height - 10;
+        font.pixelSize: menuButton.height - 10;
     }
 
     Text {
@@ -148,24 +148,13 @@ Rectangle {
         }
     }
 
-    CloseButton {
-        id: closeButton
-        z: 8
-
-        onClicked: {
-            console.log("exit pressed");
-            exitPressed();
-        }
-    }
-
     Image {
-        id: menubutton
+        id: menuButton
 
         source: "pics/menu.svg"
-        width: closeButton.width;
-        height: closeButton.height;
-        anchors.right: closeButton .left
-        anchors.rightMargin: closeButton.width
+        width: Helper.mmToPixels(8);
+        height: Helper.mmToPixels(8);
+        anchors.right: parent.right
         anchors.top: parent.top
         anchors.topMargin: 0
         fillMode: Image.Stretch
@@ -185,9 +174,13 @@ Rectangle {
 
     Menu {
         id:menupanel
-        anchors.right: menubutton.left
+        anchors.right: menuButton.left
         onScreen: false
         z:15
+        onExitClicked: {
+            menupanel.onScreen = false;
+            exitDialog.onScreen = true;
+        }
     }
 
     Rectangle {
@@ -205,7 +198,7 @@ Rectangle {
         width: parent.width
         height:  1
         x: 0
-        anchors.top: closeButton.bottom
+        anchors.top: menuButton.bottom
         color: "#7DF9FF"
     }
 
@@ -442,8 +435,12 @@ Rectangle {
     }
 
     function exitGame(){
-        saveSettings()
-        Qt.quit();
+        if (gameState == "NOTRUNNING") {
+            saveSettings()
+            Qt.quit();
+        } else {
+            Logic.cmdDead();
+        }
     }
 
 

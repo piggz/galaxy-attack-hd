@@ -26,8 +26,7 @@ Item {
         anchors.leftMargin: 10
         anchors.verticalCenter: parent.verticalCenter
         color: menuColor
-        font.pixelSize: Sizer.largeFontSize()
-
+        font.pixelSize: parent.height
     }
 
     MouseArea {

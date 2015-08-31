@@ -3,7 +3,8 @@ import QtSensors 5.0
 import QtQuick 2.0
 import QtMultimedia 5.0
 import SpaceInvaders 1.0
-import Sailfish.Silica 1.0
+//import Sailfish.Silica 1.0
+import QtQuick.Particles 2.0
 
 import "sizer.js" as Sizer;
 import "logic.js" as Logic
@@ -27,6 +28,9 @@ Rectangle {
 
     Rectangle {
         id: board
+
+        property alias particleSystem: particleSystem
+
         objectName: "gameBoard"
         color: "#000000"
         //anchors.fill: parent
@@ -41,6 +45,7 @@ Rectangle {
             source: "pics/background.png"
             anchors.fill: parent
         }
+
 
         MouseArea {
             id: themousearea
@@ -67,7 +72,7 @@ Rectangle {
             color: "#ffffff"
             x: 2
             y: 2
-            font.pixelSize: menubutton.height - 16;
+            font.pixelSize: menuButton.height - 16;
         }
 
         Text {
@@ -76,7 +81,7 @@ Rectangle {
             color: "#ffffff"
             y: 2
             anchors.horizontalCenter: board.horizontalCenter
-            font.pixelSize: menubutton.height - 16;
+            font.pixelSize: menuButton.height - 16;
         }
 
         Text {
@@ -86,6 +91,7 @@ Rectangle {
             anchors.horizontalCenter: board.horizontalCenter
             anchors.top: topline.bottom
             anchors.verticalCenterOffset: 50
+            font.pixelSize: Sizer.smallFontSize()
         }
 
         Ship {
@@ -94,26 +100,25 @@ Rectangle {
             y: board.height - (ship.height * 2) - 3;
         }
 
-    SoundEffect {
-        id: shootSound
-        source: "sounds/shoot.wav"
-    }
+        SoundEffect {
+            id: shootSound
+            source: "sounds/shoot.wav"
+        }
 
-    SoundEffect {
-        id: destroyAlienSound
-        source: "sounds/invaderkilled.wav"
-    }
+        SoundEffect {
+            id: destroyAlienSound
+            source: "sounds/invaderkilled.wav"
+        }
 
-    SoundEffect {
-        id: destroyShipSound
-        source: "sounds/explosion.wav"
-    }
+        SoundEffect {
+            id: destroyShipSound
+            source: "sounds/explosion.wav"
+        }
 
-    SoundEffect {
-        id: mysteryShipSound
-        source: "sounds/ufo_lowpitch.wav"
-        loops: SoundEffect.Infinite
-    }
+        SoundEffect {
+            id: mysteryShipSound
+            source: "sounds/ufo_lowpitch.wav"
+        }
 
         Timer {
             id: starttimer
@@ -151,25 +156,13 @@ Rectangle {
             }
         }
 
-        /*
-        CloseButton {
-            id: closeButton
-            z: 8
-
-            onClicked: {
-                console.log("exit pressed");
-                exitPressed();
-            }
-        }
-*/
         Image {
-            id: menubutton
+            id: menuButton
 
             source: "pics/menu.svg"
-            height: 48
-            width: height * 1.5
+            width: Helper.mmToPixels(5);
+            height: Helper.mmToPixels(5);
             anchors.right: parent.right
-            anchors.rightMargin: width/2
             anchors.top: parent.top
             anchors.topMargin: 0
             fillMode: Image.Stretch
@@ -189,7 +182,7 @@ Rectangle {
 
         Menu {
             id:menupanel
-            anchors.right: menubutton.left
+            anchors.right: menuButton.left
             onScreen: false
             z:15
 
@@ -214,7 +207,7 @@ Rectangle {
             width: parent.width
             height:  1
             x: 0
-            anchors.top: menubutton.bottom
+            anchors.top: menuButton.bottom
             color: "#7DF9FF"
         }
 
@@ -223,12 +216,8 @@ Rectangle {
             Component.onCompleted: start()
             onReadingChanged: {
                 var r = reading
-                if (PlatformID === 4)
-                    Logic.scheduleDirection((r.y) * -5); //Android
-                else if (PlatformID === 0 || PlatformID === 2 || PlatformID === 3 ||  PlatformID === 7 || PlatformID === 8) {
+                if (!optUseOSC) {
                     Logic.scheduleDirection((r.y) * 5); //Symbian/Harmatten/Meego/BB10
-                } else if (PlatformID === 1 || PlatformID === 6) {
-                    Logic.scheduleDirection((r.x) * -5); //Maemo / Playbook
                 }
             }
         }
@@ -310,33 +299,24 @@ Rectangle {
             height: Sizer.bunkerHeight()
         }
 
-        Explosion {
-            id: explosion
-            x: 0
-            y: 0
-            width: Sizer.alien1width() * 2;
-            height: width
-        }
-
         SpaceLogo {
             id: spacelogo
             y: board.height / 2 - 30 - height
             offScreenLocation: -width - 10
-            onScreenLocation: 100
+            onScreenLocation: board.width / 2 + 50 - width
         }
 
         InvadersLogo {
             id: invaderslogo
             y: board.height / 2 + 30
             offScreenLocation: board.width + 10
-            onScreenLocation: board.width - width - 100
+            onScreenLocation: board.width / 2 - 50
         }
 
         Hd {
             id: hdlogo
-            anchors.verticalCenter: board.verticalCenter
-            anchors.verticalCenterOffset: -50
-            anchors.right: invaderslogo.right
+            anchors.verticalCenter: spacelogo.verticalCenter
+            anchors.horizontalCenter: invaderslogo.horizontalCenter
         }
 
         SequentialAnimation {
@@ -367,8 +347,8 @@ Rectangle {
         ImageButton {
             id: startImage
             image: "pics/start.png"
-            width: 64
-            height: 64
+            width: Helper.mmToPixels(9);
+            height: Helper.mmToPixels(9);
             anchors.left: parent.left
             anchors.leftMargin: 30
             anchors.verticalCenter: parent.verticalCenter
@@ -376,21 +356,21 @@ Rectangle {
             onClicked: Logic.cmdNewGame()
         }
 
-        Image {
+        ImageButton {
             id: infoImage
-            source: "pics/info.png"
-            width: 64
-            height: 64
+            image: "pics/info.png"
+            width: Helper.mmToPixels(9);
+            height: Helper.mmToPixels(9);
             anchors.right: parent.right
             anchors.rightMargin: 30
             anchors.verticalCenter: parent.verticalCenter
             smooth: false
+            highlightColor: "#7DF9FF"
 
-            MouseArea {
-                anchors.fill: parent
-                onClicked: infoMessage.onScreen = true;
-            }
+            onClicked: infoMessage.onScreen = true;
+
         }
+
 
         InfoMessage {
             id: infoMessage
@@ -402,6 +382,36 @@ Rectangle {
 
         PowerMessage {
             id: powerMessage
+        }
+
+        ParticleSystem {
+            id: particleSystem;
+            anchors.fill: parent
+            z: 5
+            ImageParticle {
+                groups: ["red"]
+                system: particleSystem
+                color: Qt.darker("red");//Actually want desaturated...
+                source: "pics/particle-brick.png"
+                colorVariation: 0.4
+                alpha: 0.1
+            }
+            ImageParticle {
+                groups: ["blue"]
+                system: particleSystem
+                color: Qt.darker("blue");//Actually want desaturated...
+                source: "pics/particle-brick.png"
+                colorVariation: 0.4
+                alpha: 0.1
+            }
+            ImageParticle {
+                groups: ["purple"]
+                system: particleSystem
+                color: Qt.darker("#ff00ff");//Actually want desaturated...
+                source: "pics/particle-brick.png"
+                colorVariation: 0.4
+                alpha: 0.1
+            }
         }
 
         function addNewScore(level, score) {

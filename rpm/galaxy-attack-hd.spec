@@ -13,7 +13,7 @@ Name:       galaxy-attack-hd
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Space Invaders Clone
-Version:    0.9.9.5
+Version:    1.0.0.0
 Release:    1
 Group:      Games/Action
 License:    GPL v2

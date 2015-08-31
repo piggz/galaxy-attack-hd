@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import android.widget.Toast;
 import com.amazon.ags.api.*;
 import java.util.EnumSet;
+import android.view.KeyEvent;
 import static uk.co.piggz.galaxy_attack_hd.GalaxyAttackUtils.getErrorMessage;
 
 public class GalaxyAttackHDActivity extends QtActivity
@@ -63,6 +64,21 @@ public class GalaxyAttackHDActivity extends QtActivity
     //list of features your game uses (in this example, achievements and leaderboards)
     EnumSet<AmazonGamesFeature> myGameFeatures = EnumSet.of(
             AmazonGamesFeature.Achievements, AmazonGamesFeature.Leaderboards);
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event)
+    {
+         if (QtApplication.m_delegateObject != null && QtApplication.dispatchKeyEvent != null) {
+             if (event.getKeyCode() == KeyEvent.KEYCODE_BUTTON_A)
+                return (Boolean) QtApplication.invokeDelegateMethod(QtApplication.dispatchKeyEvent, new KeyEvent(event.getAction(), KeyEvent.KEYCODE_A));
+             if (event.getKeyCode() == KeyEvent.KEYCODE_BUTTON_B)
+                return (Boolean) QtApplication.invokeDelegateMethod(QtApplication.dispatchKeyEvent, new KeyEvent(event.getAction(), KeyEvent.KEYCODE_B));
+
+             return (Boolean) QtApplication.invokeDelegateMethod(QtApplication.dispatchKeyEvent, event);
+        } else {
+            return super.dispatchKeyEvent(event);
+        }
+    }
 
     @Override
     public void onResume() {

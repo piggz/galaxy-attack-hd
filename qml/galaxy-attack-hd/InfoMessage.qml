@@ -35,7 +35,7 @@ Item {
         Text {
             id: text1
             color: foreground
-            text: "Ship Control: Tilt device or \nOn-Screen controls or\nGamepad left-right\n\nFire: Tap Screen or\nGamepad a,b,x,y\n\nOptions: Down arrow in top left or\nGamepad Start/Menu button\n\nExit: X in menu\n\nSupport: adam@piggz.co.uk"
+            text: "Ship Control: Tilt device or \nOn-Screen controls or\nGamepad left-right\n\nFire: Tap Screen or\nGamepad a/select\n\nOptions: Down arrow in top left or\nGamepad Start/Menu button\n\nExit: X in menu\n\nSupport: adam@piggz.co.uk"
             wrapMode: Text.WordWrap
             anchors.left: parent.left
             anchors.leftMargin: 10
@@ -70,6 +70,7 @@ Item {
                 text: "Close"
                 anchors.centerIn: parent
                 color: foreground
+                font.pixelSize: Sizer.largeFontSize()
             }
         }
 
