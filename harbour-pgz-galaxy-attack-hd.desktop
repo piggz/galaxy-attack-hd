@@ -4,8 +4,9 @@ Version=1.0
 Type=Application
 Terminal=false
 Name=Galaxy Attack HD
-Exec=invoker --type=generic /opt/galaxy-attack-hd/bin/galaxy-attack-hd
-Icon=galaxy-attack-86
+Exec=harbour-pgz-galaxy-attack-hd
+Icon=harbour-pgz-galaxy-attack-hd
 X-Window-Icon=
 X-HildonDesk-ShowInToolbar=true
 X-Osso-Type=application/x-executable
+X-Nemo-Application-Type=generic

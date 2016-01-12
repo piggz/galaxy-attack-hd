@@ -45,7 +45,7 @@ function cmdNotRunning() {
 
 function cmdNewGame() {
     console.log("cmdNewgame");
-    state = "NEWGAME";
+    gameState = "NEWGAME";
 
     //Reset the score
     score = 0;

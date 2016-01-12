@@ -8,8 +8,11 @@
 #include "Helper.h"
 #include "scoremodel.h"
 #include "pgz_platform.h"
+#if defined(MER_EDITION_SAILFISH)
+#include <QQmlApplicationEngine>
+#else
 #include "qtquick2applicationviewer.h"
-
+#endif
 #ifdef Q_OS_ANDROID
 #include <androidaudio.h>
 #include "androidiap.h"
@@ -73,12 +76,23 @@ int main(int argc, char *argv[])
 
     qDebug() << VER;
 
+#if defined(MER_EDITION_SAILFISH)
+    QQmlApplicationEngine viewer;
+#else
     QtQuick2ApplicationViewer viewer;
+#endif
+    qmlRegisterType<Bunker>("harbour.pgz.galaxy.attack.hd", 1, 0, "Bunker");
 
-    qmlRegisterType<Bunker>("SpaceInvaders", 1, 0, "Bunker");
-    QCoreApplication::setOrganizationName("PGZ");
     QCoreApplication::setOrganizationDomain("piggz.co.uk");
-    QCoreApplication::setApplicationName("galaxy-attack-hd");
+    //work around harbour rules for config files
+    #if defined(MER_EDITION_SAILFISH)
+        QCoreApplication::setOrganizationName("harbour-pgz-galaxy-attack-hd");
+        QCoreApplication::setApplicationName("harbour-pgz-galaxy-attack-hd");
+    #else
+        QCoreApplication::setOrganizationName("PGZ");
+        QCoreApplication::setApplicationName("galaxy-attack-hd");
+    #endif
+
 
     pgzRegisterPlatform(viewer.rootContext());
 
@@ -89,8 +103,9 @@ int main(int argc, char *argv[])
     viewer.rootContext()->setContextProperty("ScoreModel", scores);
 
     viewer.rootContext()->setContextProperty("Viewer", &viewer);
+#if !defined(MER_EDITION_SAILFISH)
     viewer.setResizeMode(QQuickView::SizeRootObjectToView);
-
+#endif
 #ifdef Q_OS_ANDROID
     AndroidAudio *androidAudio = AndroidAudio::instance();
     viewer.rootContext()->setContextProperty("NativeAudio", androidAudio);
@@ -145,9 +160,7 @@ int main(int argc, char *argv[])
 #warning Doing a SFOS build :)
     NullGameController gameController;
     viewer.rootContext()->setContextProperty("GamepadController",  &gameController);
-
-    viewer.setMainQmlFile(QLatin1String("qml/galaxy-attack-hd/main-sailfish.qml"));
-    viewer.showFullScreen();
+    viewer.load(QLatin1String("/usr/share/harbour-pgz-galaxy-attack-hd/qml/galaxy-attack-hd/main-sailfish.qml"));
 #else
     //viewer.engine()->addImportPath(QString("/opt/qtm12/imports"));
     //viewer.setOrientation(QmlApplicationViewer::ScreenOrientationLockLandscape);

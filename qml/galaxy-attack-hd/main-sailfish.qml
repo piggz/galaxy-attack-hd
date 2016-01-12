@@ -1,20 +1,19 @@
-//import QtMobility.sensors 1.2
 import QtSensors 5.0
 import QtQuick 2.0
 import QtMultimedia 5.0
-import SpaceInvaders 1.0
-//import Sailfish.Silica 1.0
+import harbour.pgz.galaxy.attack.hd 1.0
+import QtQuick.Window 2.1
 import QtQuick.Particles 2.0
 
 import "sizer.js" as Sizer;
 import "logic.js" as Logic
 
-
-Rectangle {
+Window {
     id: applicationWindow
-    //allowedOrientations: Orientation.Portrait
+    contentOrientation: Qt.LandscapeOrientation
+    visible: true
 
-    property string gameState
+    property string gameState: "NOTRUNNING"
     property string lastGameState;
 
     //Settings============================================
@@ -38,6 +37,8 @@ Rectangle {
         height:parent.width
         anchors.centerIn: parent
         rotation:90
+        focus: true
+
         ColorAnimation on color {id:flashanim; from: "#999999"; to: "black"; duration: 200 }
 
         Image {
@@ -420,9 +421,10 @@ Rectangle {
 
     }
 
-    focus: true
-
-    Component.onCompleted: startupFunction();
+    Component.onCompleted: {
+        showFullScreen();
+        startupFunction();
+    }
 
     Keys.onEscapePressed:exitGame();
 
@@ -464,13 +466,10 @@ Rectangle {
         Logic.scheduleDirection(0);
     }
 
-    Connections {
-        target: Viewer
-        onWindowStateChanged: {
-            if (windowState && 1) {
-                if (gameState != "NOTRUNNING") {
-                    Logic.cmdPause();
-                }
+    onVisibilityChanged: {
+        if (visibility != 6) {
+            if (gameState != "NOTRUNNING") {
+                Logic.cmdPause();
             }
         }
     }
@@ -532,8 +531,12 @@ Rectangle {
     }
 
     function exitGame(){
-        saveSettings()
-        Qt.quit();
+        if (gameState == "NOTRUNNING") {
+            saveSettings()
+            Qt.quit();
+        } else {
+            Logic.cmdDead();
+        }
     }
 
 

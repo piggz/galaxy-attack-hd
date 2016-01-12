@@ -179,7 +179,7 @@ android-no-sdk {
         INSTALLS += $$item
     }
 
-        icon.files = galaxy-attack-86.png
+        icon.files = $${TARGET}.png
         icon.path = /usr/share/icons/hicolor/86x86/apps
         desktopfile.files = $${TARGET}.desktop
         desktopfile.path = /usr/share/applications

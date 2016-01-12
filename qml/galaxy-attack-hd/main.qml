@@ -2,7 +2,7 @@
 import QtSensors 5.0
 import QtQuick 2.0
 import QtMultimedia 5.0
-import SpaceInvaders 1.0
+import harbour.pgz.galaxy.attack.hd 1.0
 import QtQuick.Particles 2.0
 
 import "sizer.js" as Sizer;

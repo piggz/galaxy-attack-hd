@@ -1,6 +1,6 @@
-Name: galaxy-attack-hd
-Summary: Space Invaders Clone
-Version: 1.0.0.0
+Name: harbour-pgz-galaxy-attack-hd
+Summary: Space Invaders type game
+Version: 1.0.3
 Release: 1
 Group: Games/Action
 License: GPL v2
@@ -8,24 +8,20 @@ URL: http://www.piggz.co.uk
 Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |
-  Space Invaders clone written using QML
+  Space Invaders type game written using QML
 PkgConfigBR:
-- Qt5Quick
 - Qt5Qml
 - Qt5Core
 - qdeclarative5-boostable
 - Qt5Svg
 Requires:
-- qt5-qtdeclarative-qtquick
 - qt5-qtdeclarative-import-sensors
-- qt5-qtgui
 Configure: none
 Builder: qtc5
 Files:
-- '/opt/%{name}'
-- '/opt/%{name}/qml'
+- '%{_bindir}'
+- '%{_datadir}/%{name}'
 - '%{_datadir}/applications/%{name}.desktop'
-- '%{_datadir}/icons/hicolor/86x86/apps/galaxy-attack-86.png'
-- /usr/share/applications
+- '%{_datadir}/icons/hicolor/86x86/apps/%{name}.png'
 
 PkgBR: []

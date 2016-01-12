@@ -1,9 +1,14 @@
+TARGET = harbour-pgz-galaxy-attack-hd
+target.path = /usr/bin
+
 # Add more folders to ship with the application, here
 folder_01.source = qml/galaxy-attack-hd
-folder_01.target = qml
+folder_01.target = ../share/harbour-pgz-galaxy-attack-hd/qml
+folder_01.path = /usr/share/harbour-pgz-galaxy-attack-hd
+
 DEPLOYMENTFOLDERS = folder_01
 
-VERSION = 1.0.0
+VERSION = 1.0.3
 DEFINES+="MYVERSION=$${VERSION}"
 
 # Additional import path used to resolve QML modules in Creator's code model
@@ -16,8 +21,6 @@ QT += xml \
       network \
       core \
       qml \
-      quick \
-      widgets \
       svg \
       sensors
 
@@ -43,9 +46,9 @@ exists("/usr/lib/qt5/qml/Sailfish/Silica/SilicaGridView.qml"): {
     message(SailfishOS build)
     DEFINES += MER_EDITION_SAILFISH
     #Tablet
-    DEFINES += MER_PPI=330
+    #DEFINES += MER_PPI=330
     #Phone
-    #DEFINES += MER_PPI=245
+    DEFINES += MER_PPI=245
 
     MER_EDITION = sailfish
 
@@ -53,12 +56,10 @@ exists("/usr/lib/qt5/qml/Sailfish/Silica/SilicaGridView.qml"): {
     #qml.files = *.qml pages cover main.qml
 
     # The .desktop file
-    desktop.files = galaxy-attack-hd.desktop
+    desktop.files = harbour-pgz-galaxy-attack-hd.desktop
 
     # Please do not modify the following line.
     #include(../sailfishapplication/sailfishapplication.pri)
-
-    OTHER_FILES = qtinfo.yaml
  }
 
 android {
@@ -118,16 +119,15 @@ OTHER_FILES += \
     android/src/uk/co/piggz/galaxy_attack_hd/GalaxyAttackHDApplication.java \
     android/src/com/android/vending/billing/IInAppBillingService.aidl \
     android/src/uk/co/piggz/galaxy_attack_hd/GalaxyAttackUtils.java \
-    galaxy-attack-hd.desktop \
     galaxy-attack-512.png \
     galaxy-attack-480.png \
     galaxy-attack-128.png \
     galaxy-attack-124.png \
-    galaxy-attack-86.png  \
-    rpm/galaxy-attack-hd.yaml \
-    rpm/galaxy-attack-hd.spec \
     android/assets/api_key.txt \
-    android/ant.properties
+    android/ant.properties \
+    rpm/harbour-pgz-galaxy-attack-hd.yaml \
+    harbour-pgz-galaxy-attack-hd.desktop \
+    harbour-pgz-galaxy-attack-hd.png
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
