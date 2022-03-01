@@ -1,14 +1,13 @@
 TARGET = harbour-pgz-galaxy-attack-hd
-target.path = /usr/bin
+
 
 # Add more folders to ship with the application, here
 folder_01.source = qml/galaxy-attack-hd
-folder_01.target = ../share/harbour-pgz-galaxy-attack-hd/qml
-folder_01.path = /usr/share/harbour-pgz-galaxy-attack-hd
+folder_01.target = qml
 
 DEPLOYMENTFOLDERS = folder_01
 
-VERSION = 1.0.3
+VERSION = 1.0.7
 DEFINES+="MYVERSION=$${VERSION}"
 
 # Additional import path used to resolve QML modules in Creator's code model
@@ -43,17 +42,21 @@ HEADERS += \
     src/pgz_platform.h
 
 exists("/usr/lib/qt5/qml/Sailfish/Silica/SilicaGridView.qml"): {
+
+    target.path = /usr/bin
     message(SailfishOS build)
     DEFINES += MER_EDITION_SAILFISH
     #Tablet
-    #DEFINES += MER_PPI=330
+    DEFINES += MER_PPI=330
     #Phone
-    DEFINES += MER_PPI=245
+    #DEFINES += MER_PPI=245
 
     MER_EDITION = sailfish
 
     # QML files and folders
     #qml.files = *.qml pages cover main.qml
+    folder_01.target = ../share/harbour-pgz-galaxy-attack-hd/qml
+    folder_01.path = /usr/share/harbour-pgz-galaxy-attack-hd
 
     # The .desktop file
     desktop.files = harbour-pgz-galaxy-attack-hd.desktop
@@ -63,7 +66,9 @@ exists("/usr/lib/qt5/qml/Sailfish/Silica/SilicaGridView.qml"): {
  }
 
 android {
+    TARGET=galaxy-attack-hd
     DEFINES += AMAZON_DEVICE
+
     #Include the android audio library
     include(src/androidaudio/androidaudio.pri)
     INCLUDEPATH += android/jni/includes/
@@ -135,4 +140,7 @@ contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
     ANDROID_EXTRA_LIBS = \
         $$PWD/android/jni/libs/libAmazonGamesJni.so
 }
+
+DISTFILES += \
+    rpm/harbour-pgz-galaxy-attack-hd.spec
 

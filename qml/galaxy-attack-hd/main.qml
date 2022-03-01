@@ -30,6 +30,7 @@ Rectangle {
     property bool optLeftHandedOSC: false
     property bool optAlternateAxis: false
     property bool optReverseAxis: false
+    property bool onScreen: true
 
     ColorAnimation on color {id:flashanim; from: "#999999"; to: "black"; duration: 200 }
 
@@ -314,6 +315,7 @@ Rectangle {
         anchors.verticalCenter: board.verticalCenter
         anchors.verticalCenterOffset: -50
         anchors.right: invaderslogo.right
+        running: onScreen
     }
 
     SequentialAnimation {
@@ -385,6 +387,7 @@ Rectangle {
         id: particleSystem;
         anchors.fill: parent
         z: 5
+        running: onScreen
         ImageParticle {
             groups: ["red"]
             system: particleSystem
@@ -505,7 +508,8 @@ Rectangle {
     Connections {
         target: Viewer
         onWindowStateChanged: {
-            if (windowState && 1) {
+            onScreen = !(windowState && 1)
+            if (onScreen) {
                 if (gameState != "NOTRUNNING") {
                     Logic.cmdPause();
                 }

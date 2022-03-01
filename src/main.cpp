@@ -8,11 +8,13 @@
 #include "Helper.h"
 #include "scoremodel.h"
 #include "pgz_platform.h"
-#if defined(MER_EDITION_SAILFISH)
+
+#if defined(MER_EDITION_SAILFISH) || defined(Q_OS_ANDROID)
 #include <QQmlApplicationEngine>
 #else
 #include "qtquick2applicationviewer.h"
 #endif
+
 #ifdef Q_OS_ANDROID
 #include <androidaudio.h>
 #include "androidiap.h"
@@ -76,7 +78,7 @@ int main(int argc, char *argv[])
 
     qDebug() << VER;
 
-#if defined(MER_EDITION_SAILFISH)
+#if defined(MER_EDITION_SAILFISH) || defined(Q_OS_ANDROID)
     QQmlApplicationEngine viewer;
 #else
     QtQuick2ApplicationViewer viewer;
@@ -103,7 +105,7 @@ int main(int argc, char *argv[])
     viewer.rootContext()->setContextProperty("ScoreModel", scores);
 
     viewer.rootContext()->setContextProperty("Viewer", &viewer);
-#if !defined(MER_EDITION_SAILFISH)
+#if !defined(MER_EDITION_SAILFISH) && !defined(Q_OS_ANDROID)
     viewer.setResizeMode(QQuickView::SizeRootObjectToView);
 #endif
 #ifdef Q_OS_ANDROID
@@ -121,10 +123,9 @@ int main(int argc, char *argv[])
 
     viewer.rootContext()->setContextProperty("ANDROID_MARKET", ANDROID_MARKET);
 
-    viewer.engine()->setBaseUrl(QUrl::fromLocalFile("/"));
-    viewer.setSource(QUrl("assets:/qml/galaxy-attack-hd/main-android.qml"));
+    //viewer.engine()->setBaseUrl(QUrl::fromLocalFile("/"));
+    viewer.load(QUrl("assets:/qml/galaxy-attack-hd/main-android.qml"));
 
-    viewer.showFullScreen();
 #elif Q_OS_BLACKBERRY_TABLET
     qDebug() << "On a playbook!";
     
@@ -173,8 +174,6 @@ int main(int argc, char *argv[])
     viewer.show();
 
 #endif
-
-
 
     return app.exec();
 }

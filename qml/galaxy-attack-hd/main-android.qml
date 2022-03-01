@@ -2,19 +2,17 @@ import QtSensors 5.0
 import QtQuick 2.0
 import harbour.pgz.galaxy.attack.hd 1.0
 import QtQuick.Particles 2.0
+import QtQuick.Window 2.1
 
 import "sizer.js" as Sizer;
 import "logic.js" as Logic
 
-Rectangle {
-    id: board
-    objectName: "gameBoard"
-    color: "#000000"
-    width: 854
-    height:  480
-    focus: true
+Window {
+    id: applicationWindow
+    //contentOrientation: Qt.LandscapeOrientation
+    visible: true
+    visibility: Window.FullScreen
 
-    property alias particleSystem: particleSystem
     property string gameState
     property string lastGameState;
 
@@ -29,123 +27,135 @@ Rectangle {
     property bool optFullGameBought: false
 
     property int selectedItem: 0
-
     property int axisModifier: optReverseAxis ? -1 : 1
+    property bool onScreen: true
 
-    ColorAnimation on color {id:flashanim; from: "#999999"; to: "black"; duration: 200 }
+    Rectangle {
+        id: board
+        objectName: "gameBoard"
+        color: "#000000"
+        width:parent.width
+        height:parent.height
+        anchors.centerIn: parent
+       // rotation:90
+        focus: true;
 
-    Image {
-        id: background
-        source: "pics/background.png"
-        anchors.fill: parent
-    }
+        property alias particleSystem: particleSystem
 
-    MouseArea {
-        id: themousearea
-        x: 0
-        y: 30
+        ColorAnimation on color {id:flashanim; from: "#999999"; to: "black"; duration: 200 }
 
-        drag.minimumY: -1000
-        drag.minimumX: -1000
-        drag.maximumY: 1000
-        drag.maximumX: 1000
-        anchors.rightMargin: 0
-        anchors.bottomMargin: 1
-        anchors.leftMargin: 0
-        anchors.topMargin: 30
-        anchors.fill: board
-        onPressed: {
-            if (!optUseOSC || gameState !== "RUNNING") {
-                Logic.screenTap();
+        Image {
+            id: background
+            source: "pics/background.png"
+            anchors.fill: parent
+        }
+
+        MouseArea {
+            id: themousearea
+            x: 0
+            y: 30
+
+            drag.minimumY: -1000
+            drag.minimumX: -1000
+            drag.maximumY: 1000
+            drag.maximumX: 1000
+            anchors.rightMargin: 0
+            anchors.bottomMargin: 1
+            anchors.leftMargin: 0
+            anchors.topMargin: 30
+            anchors.fill: board
+            onPressed: {
+                if (!optUseOSC || gameState !== "RUNNING") {
+                    Logic.screenTap();
+                }
             }
         }
-    }
 
-    Text {
-        id: scoretext
-        text: "Score: 0"
-        color: "#ffffff"
-        x: 2
-        y: 2
-        font.pixelSize: menuButton.height - 10;
-    }
-
-    Text {
-        id: leveltext
-        text: "Level: 0"
-        color: "#ffffff"
-        y: 2
-        anchors.horizontalCenter: board.horizontalCenter
-        font.pixelSize: menuButton.height - 10;
-    }
-
-
-    Text {
-        id: starttext
-        text: gameState === "NOTRUNNING" ? "Tap the green button or press fire to start!" : "Tap the screen or press fire to continue"
-        color: "#ffffff"
-        anchors.horizontalCenter: board.horizontalCenter
-        anchors.top: topline.bottom
-        anchors.verticalCenterOffset: 50
-    }
-
-    Text {
-        id: gptext
-        text: "Gamepad detected so using it"
-        color: "#ffffff"
-        visible: GamepadController.numDevices > 0 && gameState == "NOTRUNNING";
-        anchors.horizontalCenter: board.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.verticalCenterOffset: 50
-    }
-
-
-    Ship {
-        id:ship
-        x: (board.width - ship.width) / 2;
-        y: board.height - (ship.height * 2) - 3;
-    }
-
-    Timer {
-        id: heartbeat;
-        interval: 32
-        running: true;
-        repeat: true;
-        onTriggered: {
-            gamepad.poll();
-            Logic.mainEvent();
+        Text {
+            id: scoretext
+            text: "Score: 0"
+            color: "#ffffff"
+            x: 2
+            y: 2
+            font.pixelSize: menuButton.height - 10;
         }
-    }
 
-    Timer {
-        id: starttimer
-        repeat:  false
-        interval: 1000
-        running: true
-        onTriggered: {
-            startAnimation.start();
+        Text {
+            id: leveltext
+            text: "Level: 0"
+            color: "#ffffff"
+            y: 2
+            anchors.horizontalCenter: board.horizontalCenter
+            font.pixelSize: menuButton.height - 10;
         }
-    }
 
-    Timer {
-        id: alienanimation
-        interval:  600
-        running: false
-        repeat: true
-        onTriggered: Logic.moveAliens()
-    }
 
-    Timer  {
-        id: deadtimer
-        interval: 5000
-        running: false
-        repeat: false
-        onTriggered: {
-            Logic.cmdNotRunning();
+        Text {
+            id: starttext
+            text: gameState === "NOTRUNNING" ? "Tap the green button or press fire to start!" : "Tap the screen or press fire to continue"
+            color: "#ffffff"
+            anchors.horizontalCenter: board.horizontalCenter
+            anchors.top: topline.bottom
+            anchors.verticalCenterOffset: 50
         }
-    }
 
-    /*
+        Text {
+            id: gptext
+            text: "Gamepad detected so using it"
+            color: "#ffffff"
+            visible: GamepadController.numDevices > 0 && gameState == "NOTRUNNING";
+            anchors.horizontalCenter: board.horizontalCenter
+            anchors.bottom: parent.bottom
+            anchors.verticalCenterOffset: 50
+        }
+
+
+        Ship {
+            id:ship
+            x: (board.width - ship.width) / 2;
+            y: board.height - (ship.height * 2) - 3;
+        }
+
+        Timer {
+            id: heartbeat;
+            interval: 32
+            running: true;
+            repeat: true;
+            onTriggered: {
+                gamepad.poll();
+                Logic.mainEvent();
+            }
+        }
+
+        Timer {
+            id: starttimer
+            repeat:  false
+            interval: 1000
+            running: true
+            onTriggered: {
+                startAnimation.start();
+            }
+        }
+
+        Timer {
+            id: alienanimation
+            interval:  600
+            running: false
+            repeat: true
+            onTriggered: Logic.moveAliens()
+        }
+
+        Timer  {
+            id: deadtimer
+            interval: 5000
+            running: false
+            repeat: false
+            onTriggered: {
+                Logic.cmdNotRunning();
+            }
+        }
+
+        /*
     CloseButton {
         id: closeButton
 
@@ -155,369 +165,455 @@ Rectangle {
         }
     }*/
 
-    Image {
-        id: menuButton
+        Image {
+            id: menuButton
 
-        source: "pics/menu.svg"
-        width: Helper.mmToPixels(5);
-        height: Helper.mmToPixels(5);
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.topMargin: 0
-        fillMode: Image.Stretch
-        smooth: false
+            source: "pics/menu.svg"
+            width: Helper.mmToPixels(5);
+            height: Helper.mmToPixels(5);
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.topMargin: 0
+            fillMode: Image.Stretch
+            smooth: false
 
-        MouseArea {
-            id: menuarea
-            anchors.fill: parent
-            onPressed: {
-                menupanel.onScreen = !menupanel.onScreen;
-                if (menupanel.onScreen && gameState == "RUNNING") {
-                    Logic.cmdPause();
+            MouseArea {
+                id: menuarea
+                anchors.fill: parent
+                onPressed: {
+                    menupanel.onScreen = !menupanel.onScreen;
+                    if (menupanel.onScreen && gameState == "RUNNING") {
+                        Logic.cmdPause();
+                    }
                 }
             }
         }
-    }
 
-    Menu {
-        id:menupanel
-        anchors.right: menuButton.left
-        onScreen: false
-        z:15
+        Menu {
+            id:menupanel
+            anchors.right: menuButton.left
+            onScreen: false
+            z:15
 
-        onExitClicked: {
-            menupanel.onScreen = false;
-            exitDialog.onScreen = true;
+            onExitClicked: {
+                menupanel.onScreen = false;
+                exitDialog.onScreen = true;
+            }
         }
-    }
 
-    Rectangle {
-        id: invadeline
-        width: parent.width
-        height:  1
-        x: 0
-        y: parent.height - ship.height
-        color: "#7DF9FF"
+        Rectangle {
+            id: invadeline
+            width: parent.width
+            height:  1
+            x: 0
+            y: parent.height - ship.height
+            color: "#7DF9FF"
 
-    }
+        }
 
-    Rectangle {
-        id: topline
-        width: parent.width
-        height:  1
-        x: 0
-        anchors.top: menuButton.bottom
-        color: "#7DF9FF"
-    }
+        Rectangle {
+            id: topline
+            width: parent.width
+            height:  1
+            x: 0
+            anchors.top: menuButton.bottom
+            color: "#7DF9FF"
+        }
 
-    Accelerometer  {
-        id: accelerometer
-        Component.onCompleted: start()
-        onReadingChanged: {
-            if (!optUseOSC && GamepadController.numDevices == 0) {
-                var r = reading
-                if (optAlternateAxis) {
-                    Logic.scheduleDirection((r.x) * (5 * axisModifier))
-                } else {
-                    Logic.scheduleDirection((r.y) * (5 * axisModifier))
+        Accelerometer  {
+            id: accelerometer
+            Component.onCompleted: start()
+            onReadingChanged: {
+                if (!optUseOSC && GamepadController.numDevices == 0) {
+                    var r = reading
+                    if (optAlternateAxis) {
+                        Logic.scheduleDirection((r.x) * (5 * axisModifier))
+                    } else {
+                        Logic.scheduleDirection((r.y) * (5 * axisModifier))
+                    }
                 }
             }
         }
-    }
-    
-    OnScreenControl {
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        anchors.left: parent.left
 
-        anchors.leftMargin: 20
-        anchors.rightMargin: 20
+        OnScreenControl {
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.left: parent.left
 
-        height: parent.height / 6
+            anchors.leftMargin: 20
+            anchors.rightMargin: 20
 
-        leftHanded: optLeftHandedOSC
+            height: parent.height / 6
 
-        opacity: 0.4
+            leftHanded: optLeftHandedOSC
 
-        z:1
-        visible: optUseOSC && !gamepad.gpEnabled;
+            opacity: 0.4
 
-        onMoveLeft: {
-            Logic.scheduleDirection(-10);
-        }
-        onMoveRight: {
-            Logic.scheduleDirection(10);
-        }
-        onMoveStop: {
-            Logic.scheduleDirection(0);
-        }
-        onFire: {
-            Logic.screenTap();
-        }
-    }
+            z:1
+            visible: optUseOSC && !gamepad.gpEnabled;
 
-    GamePad {
-        id: gamepad
-        gpUseInternalTimer: false
-
-        onLeftChanged: {
-            if (pressed) {
+            onMoveLeft: {
                 Logic.scheduleDirection(-10);
             }
-        }
-        onRightChanged: {
-            if (pressed) {
+            onMoveRight: {
                 Logic.scheduleDirection(10);
             }
+            onMoveStop: {
+                Logic.scheduleDirection(0);
+            }
+            onFire: {
+                Logic.screenTap();
+            }
         }
 
-        onUpChanged: {
-            if (pressed) {
+        GamePad {
+            id: gamepad
+            gpUseInternalTimer: false
+
+            onLeftChanged: {
+                if (pressed) {
+                    Logic.scheduleDirection(-10);
+                }
+            }
+            onRightChanged: {
+                if (pressed) {
+                    Logic.scheduleDirection(10);
+                }
+            }
+
+            onUpChanged: {
+                if (pressed) {
+                    handleUp();
+                }
+            }
+
+            onDownChanged: {
+                if (pressed) {
+                    handleDown()
+                }
+            }
+
+            onNoDirection: {
+                Logic.scheduleDirection(0);
+            }
+            onFireChanged: {
+                if (pressed) {
+                    handleFire();
+                }
+            }
+            onMenuChanged: {
+                if (pressed) {
+                    handleMenu();
+                }
+            }
+        }
+
+        SettingsAndroid {
+            id:settingspanel;
+            z: 10
+            onScreen: false
+        }
+
+        HiScores {
+            id:hiscorepanel;
+            z: 9
+            onScreen: false
+
+            onExitClicked: {
+                onScreen = false;
+            }
+        }
+
+        Bunker {
+            id: bunker1
+            x: Sizer.bunkerX(1);
+            y: Sizer.bunkerY()
+            width: Sizer.bunkerWidth()
+            height: Sizer.bunkerHeight()
+        }
+        Bunker {
+            id: bunker2
+            x: Sizer.bunkerX(2);
+            y: Sizer.bunkerY()
+            width: Sizer.bunkerWidth()
+            height: Sizer.bunkerHeight()
+        }
+        Bunker {
+            id: bunker3
+            x: Sizer.bunkerX(3);
+            y: Sizer.bunkerY()
+            width: Sizer.bunkerWidth()
+            height: Sizer.bunkerHeight()
+        }
+        Bunker {
+            id: bunker4
+            x: Sizer.bunkerX(4);
+            y: Sizer.bunkerY()
+            width: Sizer.bunkerWidth()
+            height: Sizer.bunkerHeight()
+        }
+
+        SpaceLogo {
+            id: spacelogo
+            y: board.height / 2 - 30 - height
+            offScreenLocation: -width - 10
+            onScreenLocation: board.width / 2 - width + 50
+        }
+
+        InvadersLogo {
+            id: invaderslogo
+            y: board.height / 2 + 30
+            offScreenLocation: board.width + 10
+            onScreenLocation: board.width / 2 - 50
+        }
+
+        Hd {
+            id: hdlogo
+            anchors.verticalCenter: spacelogo.verticalCenter
+            anchors.horizontalCenter: invaderslogo.horizontalCenter
+            running: onScreen
+        }
+
+        SequentialAnimation {
+            id: startAnimation
+            running: false
+            PropertyAnimation { target: spacelogo; property: "state"; from: "HIDDEN"; to: "VISIBLE" }
+            PauseAnimation { duration: 1000 }
+            PropertyAnimation { target: invaderslogo;property: "state";  from: "HIDDEN"; to: "VISIBLE" }
+            PauseAnimation { duration: 1000 }
+            PropertyAnimation { target: hdlogo ;property: "state";  from: "HIDDEN"; to: "VISIBLE" }
+        }
+
+        PGZDialog {
+            id:exitDialog
+            z: 50
+            anchors.centerIn: parent
+            message: "Are you sure you want to exit?"
+            onClickedNo: {
+                exitDialog.onScreen = false
+            }
+
+            onClickedYes: {
+                exitDialog.onScreen = false
+                exitGame();
+            }
+        }
+
+        PGZDialog {
+            id:buyDialog
+            z: 50
+            anchors.centerIn: parent
+            message: "You can unlock the full game with unlimited levels\nfor the equivalent of less than $1\nPress [Yes] to buy using Google Play\nor [No] to continue with the free version"
+            onClickedNo: {
+                buyDialog.onScreen = false
+            }
+
+            onClickedYes: {
+                buyDialog.onScreen = false
+                console.log("buying full game...");
+                IAP.purchaseItem("full_game");
+            }
+        }
+
+        ImageButton {
+            id: startImage
+            image: "pics/start.png"
+            width: Helper.mmToPixels(9);
+            height: Helper.mmToPixels(9);
+            anchors.left: parent.left
+            anchors.leftMargin: 30
+            anchors.verticalCenter: parent.verticalCenter
+            highlightColor: "#7DF9FF"
+            selected: selectedItem == 1
+
+            onClicked: Logic.cmdNewGame()
+        }
+
+        //Store button
+        ImageButton {
+            id: buttonPlay
+            width: Helper.mmToPixels(9);
+            height: Helper.mmToPixels(9);
+            anchors.right: infoImage.left;
+            anchors.rightMargin: 30
+            anchors.verticalCenter: parent.verticalCenter
+            visible: gameState === "NOTRUNNING"
+            highlightColor: "#7DF9FF"
+            selected: selectedItem == 2
+
+            image: ANDROID_MARKET === "AMAZON" ? "pics/amazon_store.png": "pics/play_store.png"
+
+            onClicked: {
+                if (ANDROID_MARKET === "AMAZON") {
+                    Qt.openUrlExternally("amzn://apps/android?s=uk.co.piggz&showAll=1");
+                } else {
+                    Qt.openUrlExternally("market://search?q=pub:Adam Pigg");
+                }
+            }
+        }
+
+        //Info button
+        ImageButton {
+            id: infoImage
+            image: "pics/info.png"
+            width: Helper.mmToPixels(9);
+            height: Helper.mmToPixels(9);
+            anchors.right: parent.right
+            anchors.rightMargin: 30
+            anchors.verticalCenter: parent.verticalCenter
+            smooth: false
+            highlightColor: "#7DF9FF"
+            selected: selectedItem == 3
+
+            onClicked: infoMessage.onScreen = true;
+
+        }
+
+        ImageButton {
+            id: iapButton
+            image: "pics/buy_full_game.png"
+            width: Helper.mmToPixels(9);
+            height: Helper.mmToPixels(9);
+            anchors.right: buttonPlay.left;
+            anchors.rightMargin: 30
+            anchors.verticalCenter: parent.verticalCenter
+            smooth: false
+            visible: gameState == "NOTRUNNING" && !optFullGameBought && ANDROID_MARKET === "GOOGLE"
+
+            onClicked: {
+                buyDialog.onScreen = true;
+            }
+
+        }
+        InfoMessage {
+            id: infoMessage
+            anchors.centerIn: parent
+            onClickedClose: {
+                infoMessage.onScreen = false;
+            }
+        }
+
+        PowerMessage {
+            id: powerMessage
+        }
+
+        ParticleSystem {
+            id: particleSystem;
+            anchors.fill: parent
+            z: 5
+            running: onScreen
+
+            ImageParticle {
+                groups: ["red"]
+                system: particleSystem
+                color: Qt.darker("red");//Actually want desaturated...
+                source: "pics/particle-brick.png"
+                colorVariation: 0.4
+                alpha: 0.1
+            }
+            ImageParticle {
+                groups: ["blue"]
+                system: particleSystem
+                color: Qt.darker("blue");//Actually want desaturated...
+                source: "pics/particle-brick.png"
+                colorVariation: 0.4
+                alpha: 0.1
+            }
+            ImageParticle {
+                groups: ["purple"]
+                system: particleSystem
+                color: Qt.darker("#ff00ff");//Actually want desaturated...
+                source: "pics/particle-brick.png"
+                colorVariation: 0.4
+                alpha: 0.1
+            }
+        }
+
+        function nowString()
+        {
+            var d = new Date();
+            var curr_date = d.getDate();
+            var curr_month = d.getMonth() + 1;
+            var curr_year = d.getFullYear();
+            return curr_year + "-" + curr_month + "-" + curr_date;
+        }
+
+        function addNewScore(level, score) {
+            ScoreModel.addScore(score, "default", "Galaxy Attack HD", 1, level, nowString());
+            GameCircle.submitScore("galaxy_attack_hd_leaderboard_0", ScoreModel.bestScore());
+        }
+
+        Keys.onEscapePressed:exitGame();
+
+        Keys.onReleased: {
+            if ((event.key === Qt.Key_Left) || (event.key === Qt.Key_Right)){
+                Logic.scheduleDirection(0);
+                event.accepted = true;
+            }
+        }
+
+        Keys.onPressed: {
+            //console.log("Key Pressed:", event.key);
+            if (event.key === Qt.Key_Back  || event.key === Qt.Key_B) {
+                event.accepted = true;
+                handleBack();
+                return;
+            }
+
+            if (event.key === Qt.Key_P) {
+                event.accepted = true;
+                if (gameState === "RUNNING") {
+                    Logic.cmdPause();
+                } else if (gameState === "PAUSED") {
+                    Logic.cmdResume();
+                }
+            } else if (event.key === Qt.Key_Q) {
+                event.accepted = true;
+
+                if (gameState != "NOTRUNNING") {
+                    Logic.cmdDead();
+                }
+            } else if (event.key === Qt.Key_Left) {
+                event.accepted = true;
+                handleLeft();
+            } else if (event.key === Qt.Key_Right) {
+                event.accepted = true;
+                handleRight();
+            } else if (event.key === Qt.Key_Up) {
+                event.accepted = true;
                 handleUp();
-            }
-        }
-
-        onDownChanged: {
-            if (pressed) {
-                handleDown()
-            }
-        }
-
-        onNoDirection: {
-            Logic.scheduleDirection(0);
-        }
-        onFireChanged: {
-            if (pressed) {
+            } else if (event.key === Qt.Key_Down) {
+                event.accepted = true;
+                handleDown();
+            } else if (event.key === Qt.Key_Enter || event.key === Qt.Key_A) {
+                event.accepted = true;
                 handleFire();
-            }
-        }
-        onMenuChanged: {
-            if (pressed) {
+            } else if (event.key === Qt.Key_Menu) {
+                event.accepted = true;
                 handleMenu();
             }
         }
 
     }
 
-    SettingsAndroid {
-        id:settingspanel;
-        z: 10
-        onScreen: false
-    }
-
-    HiScores {
-        id:hiscorepanel;
-        z: 9
-        onScreen: false
-
-        onExitClicked: {
-            onScreen = false;
-        }
-    }
-
-    Bunker {
-        id: bunker1
-        x: Sizer.bunkerX(1);
-        y: Sizer.bunkerY()
-        width: Sizer.bunkerWidth()
-        height: Sizer.bunkerHeight()
-    }
-    Bunker {
-        id: bunker2
-        x: Sizer.bunkerX(2);
-        y: Sizer.bunkerY()
-        width: Sizer.bunkerWidth()
-        height: Sizer.bunkerHeight()
-    }
-    Bunker {
-        id: bunker3
-        x: Sizer.bunkerX(3);
-        y: Sizer.bunkerY()
-        width: Sizer.bunkerWidth()
-        height: Sizer.bunkerHeight()
-    }
-    Bunker {
-        id: bunker4
-        x: Sizer.bunkerX(4);
-        y: Sizer.bunkerY()
-        width: Sizer.bunkerWidth()
-        height: Sizer.bunkerHeight()
-    }
-
-    SpaceLogo {
-        id: spacelogo
-        y: board.height / 2 - 30 - height
-        offScreenLocation: -width - 10
-        onScreenLocation: board.width / 2 - width + 50
-    }
-
-    InvadersLogo {
-        id: invaderslogo
-        y: board.height / 2 + 30
-        offScreenLocation: board.width + 10
-        onScreenLocation: board.width / 2 - 50
-    }
-
-    Hd {
-        id: hdlogo
-        anchors.verticalCenter: spacelogo.verticalCenter
-        anchors.horizontalCenter: invaderslogo.horizontalCenter
-    }
-
-    SequentialAnimation {
-        id: startAnimation
-        running: false
-        PropertyAnimation { target: spacelogo; property: "state"; from: "HIDDEN"; to: "VISIBLE" }
-        PauseAnimation { duration: 1000 }
-        PropertyAnimation { target: invaderslogo;property: "state";  from: "HIDDEN"; to: "VISIBLE" }
-        PauseAnimation { duration: 1000 }
-        PropertyAnimation { target: hdlogo ;property: "state";  from: "HIDDEN"; to: "VISIBLE" }
-    }
+    Component.onCompleted: startupFunction();
 
 
-    PGZDialog {
-        id:exitDialog
-        z: 50
-        anchors.centerIn: parent
-        message: "Are you sure you want to exit?"
-        onClickedNo: {
-            exitDialog.onScreen = false
-        }
 
-        onClickedYes: {
-            exitDialog.onScreen = false
-            exitGame();
-        }
-    }
+    Connections {
+        target: IAP
+        onItemPurchased: {
+            console.log("Item Name:", itemName, " Purchase State: ", purchaseState);
 
-    PGZDialog {
-        id:buyDialog
-        z: 50
-        anchors.centerIn: parent
-        message: "You can unlock the full game with unlimited levels\nfor the equivalent of less than $1\nPress [Yes] to buy using Google Play\nor [No] to continue with the free version"
-        onClickedNo: {
-            buyDialog.onScreen = false
-        }
-
-        onClickedYes: {
-            buyDialog.onScreen = false
-            console.log("buying full game...");
-            IAP.purchaseItem("full_game");
-        }
-    }
-
-    ImageButton {
-        id: startImage
-        image: "pics/start.png"
-        width: Helper.mmToPixels(9);
-        height: Helper.mmToPixels(9);
-        anchors.left: parent.left
-        anchors.leftMargin: 30
-        anchors.verticalCenter: parent.verticalCenter
-        highlightColor: "#7DF9FF"
-        selected: selectedItem == 1
-
-        onClicked: Logic.cmdNewGame()
-    }
-
-    //Store button
-    ImageButton {
-        id: buttonPlay
-        width: Helper.mmToPixels(9);
-        height: Helper.mmToPixels(9);
-        anchors.right: infoImage.left;
-        anchors.rightMargin: 30
-        anchors.verticalCenter: parent.verticalCenter
-        visible: gameState === "NOTRUNNING"
-        highlightColor: "#7DF9FF"
-        selected: selectedItem == 2
-
-        image: ANDROID_MARKET === "AMAZON" ? "pics/amazon_store.png": "pics/play_store.png"
-
-        onClicked: {
-            if (ANDROID_MARKET === "AMAZON") {
-                Qt.openUrlExternally("amzn://apps/android?s=uk.co.piggz&showAll=1");
+            if (itemName === "full_game" && purchaseState === 0) {
+                powerMessage.displayMessage("Thank you, game unlocked!");
+                optFullGameBought = true;
             } else {
-                Qt.openUrlExternally("market://search?q=pub:Adam Pigg");
+                powerMessage.displayMessage("Buying game failed");
+                optFullGameBought = false;
             }
         }
     }
-
-    //Info button
-    ImageButton {
-        id: infoImage
-        image: "pics/info.png"
-        width: Helper.mmToPixels(9);
-        height: Helper.mmToPixels(9);
-        anchors.right: parent.right
-        anchors.rightMargin: 30
-        anchors.verticalCenter: parent.verticalCenter
-        smooth: false
-        highlightColor: "#7DF9FF"
-        selected: selectedItem == 3
-
-        onClicked: infoMessage.onScreen = true;
-
-    }
-
-    ImageButton {
-        id: iapButton
-        image: "pics/buy_full_game.png"
-        width: Helper.mmToPixels(9);
-        height: Helper.mmToPixels(9);
-        anchors.right: buttonPlay.left;
-        anchors.rightMargin: 30
-        anchors.verticalCenter: parent.verticalCenter
-        smooth: false
-        visible: gameState == "NOTRUNNING" && !optFullGameBought && ANDROID_MARKET === "GOOGLE"
-
-        onClicked: {
-            buyDialog.onScreen = true;
-        }
-
-    }
-    InfoMessage {
-        id: infoMessage
-        anchors.centerIn: parent
-        onClickedClose: {
-            infoMessage.onScreen = false;
-        }
-    }
-
-    PowerMessage {
-        id: powerMessage
-    }
-
-    ParticleSystem {
-        id: particleSystem;
-        anchors.fill: parent
-        z: 5
-        ImageParticle {
-            groups: ["red"]
-            system: particleSystem
-            color: Qt.darker("red");//Actually want desaturated...
-            source: "pics/particle-brick.png"
-            colorVariation: 0.4
-            alpha: 0.1
-        }
-        ImageParticle {
-            groups: ["blue"]
-            system: particleSystem
-            color: Qt.darker("blue");//Actually want desaturated...
-            source: "pics/particle-brick.png"
-            colorVariation: 0.4
-            alpha: 0.1
-        }
-        ImageParticle {
-            groups: ["purple"]
-            system: particleSystem
-            color: Qt.darker("#ff00ff");//Actually want desaturated...
-            source: "pics/particle-brick.png"
-            colorVariation: 0.4
-            alpha: 0.1
-        }
-    }
-
 
     //=====================Functions=========================
 
@@ -557,103 +653,6 @@ Rectangle {
         }
     }
 
-    Component.onCompleted: startupFunction();
-
-    Keys.onEscapePressed:exitGame();
-
-    Keys.onReleased: {
-        if ((event.key === Qt.Key_Left) || (event.key === Qt.Key_Right)){
-            Logic.scheduleDirection(0);
-            event.accepted = true;
-        }
-    }
-
-    Keys.onPressed: {
-        if (event.key === Qt.Key_Back  || event.key === Qt.Key_B) {
-            event.accepted = true;
-            handleBack();
-            return;
-        }
-
-        if (event.key === Qt.Key_P) {
-            event.accepted = true;
-            if (gameState === "RUNNING") {
-                Logic.cmdPause();
-            } else if (gameState === "PAUSED") {
-                Logic.cmdResume();
-            }
-        } else if (event.key === Qt.Key_Q) {
-            event.accepted = true;
-
-            if (gameState != "NOTRUNNING") {
-                Logic.cmdDead();
-            }
-        } else if (event.key === Qt.Key_Left) {
-            event.accepted = true;
-            handleLeft();
-        } else if (event.key === Qt.Key_Right) {
-            event.accepted = true;
-            handleRight();
-        } else if (event.key === Qt.Key_Up) {
-            event.accepted = true;
-            handleUp();
-        } else if (event.key === Qt.Key_Down) {
-            event.accepted = true;
-            handleDown();
-        } else if (event.key === Qt.Key_Enter || event.key === Qt.Key_A) {
-            event.accepted = true;
-            handleFire();
-        } else if (event.key === Qt.Key_Menu) {
-            event.accepted = true;
-            handleMenu();
-        }
-    }
-
-    Connections {
-        target: Viewer
-        onWindowStateChanged: {
-            console.log("Window state changed", windowState);
-            if (windowState && 1) {
-                if (gameState != "NOTRUNNING") {
-                    Logic.cmdPause();
-                }
-            }
-        }
-        onVisibleChanged: {
-            console.log("visible", visible);
-        }
-
-    }
-
-    Connections {
-        target: IAP
-        onItemPurchased: {
-            console.log("Item Name:", itemName, " Purchase State: ", purchaseState);
-
-            if (itemName === "full_game" && purchaseState === 0) {
-                powerMessage.displayMessage("Thank you, game unlocked!");
-                optFullGameBought = true;
-            } else {
-                powerMessage.displayMessage("Buying game failed");
-                optFullGameBought = false;
-            }
-        }
-    }
-
-    function nowString()
-    {
-        var d = new Date();
-        var curr_date = d.getDate();
-        var curr_month = d.getMonth() + 1;
-        var curr_year = d.getFullYear();
-        return curr_year + "-" + curr_month + "-" + curr_date;
-    }
-
-    function addNewScore(level, score) {
-        ScoreModel.addScore(score, "default", "Galaxy Attack HD", 1, level, nowString());
-        GameCircle.submitScore("galaxy_attack_hd_leaderboard_0", ScoreModel.bestScore());
-    }
-
     function loadSettings(){
         optUseOSC = Helper.getBoolSetting("bUseOSC", false);
         optLeftHandedOSC = Helper.getBoolSetting("bLeftHandOSC", false);
@@ -672,7 +671,7 @@ Rectangle {
         Helper.setSetting("bLeftHandOSC", optLeftHandedOSC);
         Helper.setSetting("bAlternateAxis", optAlternateAxis);
         Helper.setSetting("bReverseAxis", optReverseAxis);
-        
+
         ScoreModel.saveScores();
 
         console.log("Saved Settings");
@@ -807,6 +806,16 @@ Rectangle {
             return;
         }
         Logic.scheduleDirection(10);
+    }
+
+    onVisibilityChanged: {
+        onScreen = (visibility != 3) && (visibility != 0);
+        console.log("Visibility:", visibility);
+        if (!onScreen) {
+            if (gameState != "NOTRUNNING") {
+                Logic.cmdPause();
+            }
+        }
     }
 
 }

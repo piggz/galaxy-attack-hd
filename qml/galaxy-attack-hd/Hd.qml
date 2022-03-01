@@ -5,6 +5,7 @@ Item {
     width: 128
     height: 128
     state: "HIDDEN"
+    property alias running: tmrStarRotate.running
 
     Image {
         id: imgStar

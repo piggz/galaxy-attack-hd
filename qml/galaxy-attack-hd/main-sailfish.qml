@@ -24,6 +24,7 @@ Window {
     property bool optLeftHandedOSC: false
     property bool optAlternateAxis: false
     property bool optReverseAxis: false
+    property bool onScreen: true
 
     Rectangle {
         id: board
@@ -218,7 +219,7 @@ Window {
             onReadingChanged: {
                 var r = reading
                 if (!optUseOSC) {
-                    Logic.scheduleDirection((r.y) * 5); //Symbian/Harmatten/Meego/BB10
+                    Logic.scheduleDirection((r.y) * 8); //Symbian/Harmatten/Meego/BB10
                 }
             }
         }
@@ -318,6 +319,7 @@ Window {
             id: hdlogo
             anchors.verticalCenter: spacelogo.verticalCenter
             anchors.horizontalCenter: invaderslogo.horizontalCenter
+            running: onScreen
         }
 
         SequentialAnimation {
@@ -389,6 +391,7 @@ Window {
             id: particleSystem;
             anchors.fill: parent
             z: 5
+            running: onScreen
             ImageParticle {
                 groups: ["red"]
                 system: particleSystem
@@ -467,7 +470,9 @@ Window {
     }
 
     onVisibilityChanged: {
-        if (visibility != 6) {
+        onScreen = (visibility != 3) && (visibility != 0);
+        console.log("Visibility:", visibility);
+        if (!onScreen) {
             if (gameState != "NOTRUNNING") {
                 Logic.cmdPause();
             }

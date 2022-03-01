@@ -36,7 +36,7 @@ function cmdNotRunning() {
     startImage.visible = true;
 
     //Stop the animation timers
-    //heartbeat.running = false;
+    heartbeat.running = false;
     alienanimation.running = false;
 
 
@@ -154,7 +154,7 @@ function cmdLevelComplete() {
 
     starttext.visible = true;
 
-    //heartbeat.running = false;
+    heartbeat.running = false;
     alienanimation.running = false;
 
     cleanupBombs();
@@ -214,7 +214,7 @@ function cmdPause() {
     powerMessage.displayMessage("Paused");
 
     //Stop the animation timers
-    //heartbeat.running = false;
+    heartbeat.running = false;
     alienanimation.running = false;
 }
 

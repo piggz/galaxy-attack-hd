@@ -33,7 +33,7 @@ Item {
         from: 0;
         to: 360;
         duration: 5000
-        running: true
+        running: applicationWindow.onScreen
         loops: -1
     }
 

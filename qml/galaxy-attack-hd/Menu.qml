@@ -9,6 +9,7 @@ Rectangle {
     property bool animating: !((y === 0) || ( y  == (-height - 5)))
     property int selectedItem: 0
     property color foreground: "#7DF9FF"
+    property int maxItem: ANDROID_MARKET === "GOOGLE" ? 7 : 5
 
     signal exitClicked
 
@@ -163,6 +164,7 @@ Rectangle {
             font.pixelSize: Sizer.largeFontSize()
             //            anchors.topMargin: Sizer.largeFontSize() / 3
             anchors.rightMargin: Sizer.largeFontSize() / 3
+            visible: ANDROID_MARKET === "GOOGLE"
             MouseArea {
                 anchors.fill: parent;
                 onClicked: Qt.openUrlExternally("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QVTJ5JNBQA72A");
@@ -172,7 +174,7 @@ Rectangle {
 
     function downPressed() {
         selectedItem++;
-        if (selectedItem > 7) {
+        if (selectedItem > maxItem) {
             selectedItem = 1;
         }
     }
@@ -180,7 +182,7 @@ Rectangle {
     function upPressed() {
         selectedItem--;
         if (selectedItem < 1) {
-            selectedItem = 7;
+            selectedItem = maxItem;
         }
     }
 
