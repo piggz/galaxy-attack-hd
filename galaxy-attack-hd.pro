@@ -7,7 +7,7 @@ folder_01.target = qml
 
 DEPLOYMENTFOLDERS = folder_01
 
-VERSION = 1.0.7
+VERSION = 1.0.8
 DEFINES+="MYVERSION=$${VERSION}"
 
 # Additional import path used to resolve QML modules in Creator's code model
