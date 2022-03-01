@@ -41,7 +41,7 @@ HEADERS += \
     src/scoremodel.h \
     src/pgz_platform.h
 
-exists("/usr/lib/qt5/qml/Sailfish/Silica/SilicaGridView.qml"): {
+exists("/usr/lib/qt5/qml/Sailfish/Silica/SilicaGridView.qml") || exists("/usr/lib64/qt5/qml/Sailfish/Silica/SilicaGridView.qml"): {
 
     target.path = /usr/bin
     message(SailfishOS build)

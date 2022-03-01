@@ -19,13 +19,18 @@ Group:      Games/Action
 License:    GPL v2
 URL:        http://www.piggz.co.uk
 Source0:    %{name}-%{version}.tar.bz2
-Source100:  harbour-pgz-galaxy-attack-hd.yaml
 Requires:   qt5-qtdeclarative-import-sensors
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(qdeclarative5-boostable)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  desktop-file-utils
+BuildRequires:  pkgconfig(Qt5Xml)
+BuildRequires:  pkgconfig(Qt5XmlPatterns)
+BuildRequires:  pkgconfig(Qt5Sensors)
+BuildRequires:  pkgconfig(Qt5Quick)
+BuildRequires:  pkgconfig(Qt5Widgets)
+BuildRequires:  sailfishsilica-qt5
 
 %description
 Space Invaders type game written using QML
