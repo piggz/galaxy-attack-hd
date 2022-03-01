@@ -7,7 +7,7 @@ folder_01.target = qml
 
 DEPLOYMENTFOLDERS = folder_01
 
-VERSION = 1.0.8
+VERSION = 1.0.9
 DEFINES+="MYVERSION=$${VERSION}"
 
 # Additional import path used to resolve QML modules in Creator's code model
@@ -130,7 +130,6 @@ OTHER_FILES += \
     galaxy-attack-124.png \
     android/assets/api_key.txt \
     android/ant.properties \
-    rpm/harbour-pgz-galaxy-attack-hd.yaml \
     harbour-pgz-galaxy-attack-hd.desktop \
     harbour-pgz-galaxy-attack-hd.png
 
@@ -141,6 +140,5 @@ contains(ANDROID_TARGET_ARCH,armeabi-v7a) {
         $$PWD/android/jni/libs/libAmazonGamesJni.so
 }
 
-DISTFILES += \
-    rpm/harbour-pgz-galaxy-attack-hd.spec
+DISTFILES += rpm/harbour-pgz-galaxy-attack-hd.spec
 

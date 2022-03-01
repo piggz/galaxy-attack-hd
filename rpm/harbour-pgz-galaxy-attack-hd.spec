@@ -13,7 +13,7 @@ Name:       harbour-pgz-galaxy-attack-hd
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Space Invaders type game
-Version:    1.0.8
+Version:    1.0.9
 Release:    1
 Group:      Games/Action
 License:    GPL v2
@@ -29,6 +29,26 @@ BuildRequires:  desktop-file-utils
 
 %description
 Space Invaders type game written using QML
+
+%if "%{?vendor}" == "chum"
+PackageName: Galaxy Attack HD
+Type: desktop-application
+DeveloperName: Adam Pigg
+Categories:
+ - Games
+Custom:
+  Repo: https://github.com/piggz/galaxy-attack-hd
+Icon: https://raw.githubusercontent.com/piggz/galaxy-attack-hd/master/galaxy-attack-128.png
+Screenshots:
+ - https://raw.githubusercontent.com/piggz/galaxy-attack-hd/master/media/Screenshot_2014-10-05-20-29-38.png
+ - https://raw.githubusercontent.com/piggz/galaxy-attack-hd/master/media/Screenshot_2014-10-05-20-54-46.png
+ - https://raw.githubusercontent.com/piggz/galaxy-attack-hd/master/media/amazon_featured.png
+Url:
+  Homepage: https://github.com/piggz/galaxy-attack-hd
+  Help: https://github.com/piggz/galaxy-attack-hd/discussions
+  Bugtracker: https://github.com/piggz/galaxy-attack-hd/issues
+  Donation: https://www.paypal.me/piggz
+%endif
 
 
 %prep
