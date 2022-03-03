@@ -33,14 +33,20 @@ BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  sailfishsilica-qt5
 
 %description
-Space Invaders type game written using QML
+A classic space based shooter written to take advantage of todays devices with accelerometers and touch screens.
+
+Complete with infinite levels, accelerometer controls, hi scores, and a touch friendly, fluid interface.
+
+Use the accelerometer or on-screen buttons for control of the ship.
+
+Main menu is the arrow button in the top right or hardware menu button.
 
 %if "%{?vendor}" == "chum"
 PackageName: Galaxy Attack HD
 Type: desktop-application
 DeveloperName: Adam Pigg
 Categories:
- - Games
+ - Game
 Custom:
   Repo: https://github.com/piggz/galaxy-attack-hd
 Icon: https://raw.githubusercontent.com/piggz/galaxy-attack-hd/master/galaxy-attack-128.png
